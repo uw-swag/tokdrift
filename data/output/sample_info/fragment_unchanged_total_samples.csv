@@ -1,0 +1,12 @@
+model,lsquarebracket_name,snake_case-camel_case,op_lparentheses,period_asterisk,rparentheses_period,op_name,snake_case-pascal_case,period_name,double_plus_rparentheses,lparentheses_name,op_rsquarebracket,camel_case-snake_case,rparentheses_semicolon,camel_case-pascal_case,snake_case-screaming_snake_case,op_dash,op_lsquarebracket,lparentheses_rparentheses,rparentheses_colon,camel_case-screaming_snake_case,op_semicolon,rsquarebracket_rparentheses,op_all,rparentheses_rparentheses
+Llama-3.1-8B-Instruct,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
+Llama-3.2-3B-Instruct,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
+Llama-3.3-70B-Instruct,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
+Qwen2.5-Coder-7B-Instruct,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
+Qwen2.5-Coder-1.5B-Instruct,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
+Qwen2.5-Coder-32B-Instruct,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
+deepseek-coder-1.3b-instruct,391,238,123,13,179,733,144,715,420,1097,230,291,685,246,30,107,141,519,542,50,737,165,711,873
+deepseek-coder-6.7b-instruct,391,238,123,13,179,733,144,715,420,1097,230,291,685,246,30,107,141,519,542,50,737,165,711,873
+deepseek-coder-33b-instruct,391,238,123,13,179,733,144,715,420,1097,230,291,685,246,30,107,141,519,542,50,737,165,711,873
+CodeQwen1.5-7B-Chat,394,216,123,550,181,705,139,690,421,1123,224,282,524,258,21,109,125,599,562,38,583,165,694,948
+Qwen2.5-Coder-7B,401,260,288,10,184,845,212,700,420,1287,257,287,550,295,112,94,145,982,570,126,596,216,827,943
