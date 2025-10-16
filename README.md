@@ -4,7 +4,7 @@
   <img src="figures/example.jpg" alt="TokDrift Overview" width="100%">
 </p>
 
-This is the repository for the paper [TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar](https://github.com/uw-swag/tokdrift). TokDrift is a framework designed to apply semantic-preserving rewrite rules and measure their influence on various code-related tasks.
+This is the code repository for the paper [TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar](https://github.com/uw-swag/tokdrift). TokDrift is a framework designed to apply semantic-preserving rewrite rules and measure their influence on various code-related tasks.
 
 ## ⚙️ Environment Setup
 
