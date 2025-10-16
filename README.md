@@ -62,7 +62,7 @@ Two example scripts for running baseline and variant experiments are provided in
 - [`baseline_example.sh`](scripts/baseline_example.sh) - Example for running baseline experiments
 - [`variant_example.sh`](scripts/variant_example.sh) - Example for running variant experiments
 
-**<u>Please refer to the following sections (click to expand) for detailed usage instructions.</u>**
+<b><ins>Please refer to the following sections (click to expand) for detailed usage instructions.</ins></b>
 
 <details close>
 <summary><b><font size="5">📌 Running Experiments</font></b></summary>
