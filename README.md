@@ -291,7 +291,7 @@ This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs
 
 **Vector Visualization:**
 
-Visualize hidden state representations difference, please check the [vector_visualizer.py](src/tokdrift/vector_visualizer.py) for more details:
+Visualize hidden state representations difference, please check the [`vector_visualizer.py`](src/tokdrift/vector_visualizer.py) for more details:
 
 ```bash
 # Generate 2D t-SNE visualizations
