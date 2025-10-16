@@ -25,7 +25,6 @@ cd ..
 
 This environment is used to execute and validate generated code during experiments.
 
----
 ## Dataset Preparation
 
 **Download the Avatar dataset from Hugging Face:**
@@ -51,7 +50,6 @@ mv ./data/input/avatar/var.py ./datasets/avatar/var/var.py
 python -m src.tokdrift.data_generator --all
 ```
 
----
 ## Example Scripts
 
 Two example scripts for running baseline and variant experiments are provided in the [`scripts`](scripts) directory:
@@ -61,7 +59,6 @@ Two example scripts for running baseline and variant experiments are provided in
 
 For detailed usage instructions, see the [Running Experiments](#running-experiments) and [Task Variants](#task-variants) sections below.
 
----
 ## Result Analysis
 After running experiments, analyze the results using the following commands:
 
@@ -117,7 +114,6 @@ python -m src.tokdrift.result_evaluator --wilcoxon_test
 This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity to token boundary changes.
 
 
----
 ## Running Experiments
 #### Environment Variables
 
@@ -218,7 +214,6 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   --max_memory_per_gpu "auto"
 ```
 
----
 ## Task Variants
 #### HumanEval Fix Task
 
