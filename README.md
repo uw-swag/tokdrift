@@ -170,7 +170,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   --max_memory_per_gpu "auto"
 ```
 
-*Storing hidden states is currently not supported when using model parallelism.*
+*Storing hidden states is currently not supported when using data parallelism.*
 
 </details>
 
@@ -267,7 +267,7 @@ This creates comprehensive CSV files in `./data/output/` containing:
 
 Utilize [`result_evaluator.py`](src/tokdrift/result_evaluator.py) to gather all result datapoints for sensitivity analysis. 
 
-**Get Summary and Sensitivity Results:**
+<b><ins>Get Summary and Sensitivity Results</ins></b>:
 
 ```bash
 python -m src.tokdrift.result_evaluator --diff
@@ -282,7 +282,7 @@ Output files are saved to:
 - `./data/output/sensitivity/` - Sensitivity percentages
 - `./data/output/sample_info/` - Sample counts and statistics
 
-**Wilcoxon Signed-Rank Test:**
+<b><ins>Wilcoxon Signed-Rank Test</ins></b>:
 
 Test the statistical significance of performance differences between various model sizes within one model series:
 
@@ -292,7 +292,7 @@ python -m src.tokdrift.result_evaluator --wilcoxon_test
 
 This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity.
 
-**Vector Visualization:**
+<b><ins>Vector Visualization</ins></b>:
 
 Visualize hidden state representations difference, please check the [`vector_visualizer.py`](src/tokdrift/vector_visualizer.py) for more details:
 
