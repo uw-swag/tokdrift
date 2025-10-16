@@ -35,10 +35,13 @@ This environment is used to execute and validate generated code during experimen
 **Download the Avatar dataset from Hugging Face:**
 
 ```bash
-git lfs install
+cd datasets
+# requires Git LFS installed
 GIT_LFS_SKIP_SMUDGE=0 git clone https://huggingface.co/datasets/iidai/avatar
 # Normalize the dataset
 python scripts/split_avatar.py
+mv ./data/input/avatar/base.py ./datasets/avatar/base/base.py
+cd ..
 ```
 
 **Generate rewrite dataset for Avatar tasks only:**
@@ -285,6 +288,65 @@ python -m src.tokdrift.result_evaluator --wilcoxon_test
 ```
 
 This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity.
+
+**Vector Visualization:**
+
+Visualize hidden state representations difference, please check the [vector_visualizer.py](src/tokdrift/vector_visualizer.py) for more details:
+
+```bash
+# Generate 2D t-SNE visualizations
+python -m src.tokdrift.vector_visualizer --vector --model "Qwen2.5-Coder-32B-Instruct"
+
+# Generate 3D PCA visualizations
+python -m src.tokdrift.vector_visualizer --vector_3d --model "Llama-3.3-70B-Instruct"
+
+# Generate similarity plots
+python -m src.tokdrift.vector_visualizer --similarity --model "deepseek-coder-33b-instruct"
+```
+
+<details close>
+<summary><b><font size="5">Example: 2D Visualizations (t-SNE)</font></b></summary>
+
+<table>
+  <tr>
+    <td width="50%">
+      <p align="center">
+        <img src="figures/vector_visualization/vector_qwen32b_naming.png" alt="2D t-SNE visualization of naming variants" width="100%">
+      </p>
+      <p align="center"><i>Naming variants visualization from Qwen2.5-Coder-32B-Instruct (middle layer)</i></p>
+    </td>
+    <td width="50%">
+      <p align="center">
+        <img src="figures/vector_visualization/vector_qwen32b_spacing.png" alt="2D t-SNE visualization of spacing variants" width="100%">
+      </p>
+      <p align="center"><i>Spacing variants visualization from Qwen2.5-Coder-32B-Instruct (middle layer)</i></p>
+    </td>
+  </tr>
+</table>
+
+</details>
+
+<details close>
+<summary><b><font size="5">Example: 3D Visualizations (PCA)</font></b></summary>
+
+<table>
+  <tr>
+    <td width="50%">
+      <p align="center">
+        <img src="figures/3d_pca_visualization/vector_llama8b_naming_3d_last_layer.png" alt="3D PCA visualization of naming variants" width="100%">
+      </p>
+      <p align="center"><i>Naming variants visualization from Llama-3.1-8B-Instruct (last layer)</i></p>
+    </td>
+    <td width="50%">
+      <p align="center">
+        <img src="figures/3d_pca_visualization/vector_ds33b_spacing_3d_last_layer.png" alt="3D PCA visualization of spacing variants" width="100%">
+      </p>
+      <p align="center"><i>Spacing variants visualization from deepseek-coder-33b-instruct (last layer)</i></p>
+    </td>
+  </tr>
+</table>
+
+</details>
 
 ## 🎇 Acknowledgements
 
