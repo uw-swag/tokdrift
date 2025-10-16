@@ -248,7 +248,7 @@ This processes all tasks, models, naming variants, and spacing variants to gener
 Generate CSV summary files for all results:
 
 ```bash
-python -m src.tokdrift.result_evaluator --sum_to_csv
+python -m src.tokdrift.result_extractor --sum_to_csv
 ```
 
 This creates comprehensive CSV files in `./data/output/` containing:
@@ -258,6 +258,8 @@ This creates comprehensive CSV files in `./data/output/` containing:
 - Per-task and per-model breakdowns
 
 #### Additional Analysis Options
+
+Utilize [`result_evaluator.py`](src/tokdrift/result_evaluator.py) to gather all result datapoints for sensitivity analysis. 
 
 **Get Summary and Sensitivity Results:**
 
@@ -282,7 +284,7 @@ Test the statistical significance of performance differences between various mod
 python -m src.tokdrift.result_evaluator --wilcoxon_test
 ```
 
-This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity to token boundary changes.
+This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity.
 
 ## 🎇 Acknowledgements
 
