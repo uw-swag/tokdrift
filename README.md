@@ -7,16 +7,17 @@
 This is the repository for the paper [TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar](https://github.com/uw-swag/tokdrift). TokDrift is a framework designed to apply semantic-preserving rewrite rules and measure their influence on various code-related tasks.
 
 ## ⚙️ Environment Setup
-#### Prerequisites
-- [uv](https://github.com/astral-sh/uv) package manager (for testing)
-- Git LFS (for downloading large datasets from Hugging Face)
 
-
-#### Setup Environment
-Run the provided setup script:
+Run the provided setup script to create a [conda environment](https://www.anaconda.com/docs/getting-started/miniconda/main) with the dependencies:
 
 ```bash
 bash prepare-env.sh
+```
+
+Activate the environment for running the experiments:
+
+```bash
+conda activate tokdrift
 ```
 
 For testing generated code, set up a virtual environment with required dependencies:

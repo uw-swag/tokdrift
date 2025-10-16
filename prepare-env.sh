@@ -27,8 +27,7 @@ function prepare_conda_env() {
         conda install fsspec antlr4-python3-runtime antlr4-tools uv -c conda-forge -y
         conda install datasets=3.6.0 -c conda-forge -y
         conda install openjdk=21 -c conda-forge -y
-        conda install scikit-learn seaborn -c conda-forge -y
-        pip install protobuf
+        pip install protobuf scikit-learn seaborn
 }
 
 
