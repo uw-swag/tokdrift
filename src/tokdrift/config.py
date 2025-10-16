@@ -1,7 +1,5 @@
 import os
 
-from .tasks import DATASET_MODEL_MAPPING
-
 class Config:
     def __init__(self):
 
@@ -31,14 +29,14 @@ class Config:
             "humanevalexplaindescribe-java",
             "humanevalfixtests-python",
             "humanevalfixtests-java",
-            "avatartranslate-python2java",
-            "avatartranslate-java2python",
+            # "avatartranslate-python2java",
+            # "avatartranslate-java2python",
             "codenettranslate-python2java",
             "codenettranslate-java2python",
         ]
 
         # Model Selection
-        self.model = "deepseek-ai/deepseek-coder-33b-instruct"
+        self.model = "meta-llama/Llama-3.1-8B-Instruct"
         
         # Task Selection
         self.task = "humanevalexplaindescribe-python"
@@ -165,13 +163,13 @@ class Config:
             self.combination_name = "custom_combination"  # Change this manually for multiple combinations
 
         if self.processing_mode == "multi_token_identifiers":
-            self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/{DATASET_MODEL_MAPPING[self.model]}/data/{self.lang}-{self.target_type}/data/{self.output_jsonl_file_name}.jsonl"
+            self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/var/data/{self.lang}-{self.target_type}/data/{self.output_jsonl_file_name}.jsonl"
             if self.output_dataset_name == "humanevalfixtests":
-                self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/{DATASET_MODEL_MAPPING[self.model]}/data/{self.lang}-{self.target_type}-fix/data/{self.output_jsonl_file_name}.jsonl"
+                self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/var/data/{self.lang}-{self.target_type}-fix/data/{self.output_jsonl_file_name}.jsonl"
         else:  # combined_token_operators
-            self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/{DATASET_MODEL_MAPPING[self.model]}/data/{self.lang}-{self.combination_name}/data/{self.output_jsonl_file_name}.jsonl"
+            self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/var/data/{self.lang}-{self.combination_name}/data/{self.output_jsonl_file_name}.jsonl"
             if self.output_dataset_name == "humanevalfixtests":
-                self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/{DATASET_MODEL_MAPPING[self.model]}/data/{self.lang}-{self.combination_name}-fix/data/{self.output_jsonl_file_name}.jsonl"
+                self.data_generator_output_dataset = f"./datasets/{self.output_jsonl_file_name}/var/data/{self.lang}-{self.combination_name}-fix/data/{self.output_jsonl_file_name}.jsonl"
         
         if self.processing_mode == "multi_token_identifiers":
             self.result_dir = f"./data/output/{self.task}/{self.model_name}/{self.target_type}"

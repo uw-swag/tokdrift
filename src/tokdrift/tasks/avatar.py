@@ -93,7 +93,7 @@ class Avatar(Task):
             self.target_lang = target_lang.split('-')[0]
             self.variant = target_lang.split('-')[1]
 
-            self.DATASET_PATH = f"./{self.DATASET_PATH}/{self.model_name}"
+            self.DATASET_PATH = f"./{self.DATASET_PATH}/var"
             self.DATASET_NAME = f"{self.source_lang}-{self.variant}"
         else:
             # For original tasks

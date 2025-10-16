@@ -15,7 +15,7 @@ class ConfigIterator:
                    all_models: bool = False,
                    all_multi_token_identifiers: bool = False,
                    all_combined_token_operators: bool = False,
-                   tokenizer_list: bool = False) -> Iterator[Tuple[str, str, str, Optional[AutoTokenizer]]]:
+                   generate_dataset: bool = False) -> Iterator[Tuple[str, str, str, Optional[AutoTokenizer]]]:
         """
         Iterate through all combinations of tasks, models, and processing modes
 
@@ -24,13 +24,14 @@ class ConfigIterator:
             all_models: If True, iterate through all models
             all_multi_token_identifiers: If True, process multi-token identifiers
             all_combined_token_operators: If True, process combined token operators
+            generate_dataset: If True, generate dataset
 
         Yields:
             Tuple of (task, model, processing_mode, tokenizer)
         """
         tasks_to_process = self.config.all_tasks if all_tasks else [self.config.task]
-        if tokenizer_list:
-            models_to_process = self.config.tokenizer_model_list if all_models else [self.config.model]
+        if generate_dataset:
+            models_to_process = [self.config.model]
         else:
             models_to_process = self.config.model_list if all_models else [self.config.model]
 
@@ -85,43 +86,3 @@ class ConfigIterator:
                         print(f"Processing target combinations: {target_combinations}")
 
                         yield task, model, "combined_token_operators", tokenizer
-
-    def iterate_subtasks(self,
-                        all_tasks: bool = False,
-                        all_models: bool = False) -> Iterator[Tuple[str, str, str]]:
-        """
-        Iterate through subtasks for verification purposes
-
-        Args:
-            all_tasks: If True, iterate through all tasks
-            all_models: If True, iterate through all models
-
-        Yields:
-            Tuple of (main_task, model, subtask)
-        """
-        tasks_to_process = self.config.all_tasks if all_tasks else [self.config.task]
-
-        for task in tasks_to_process:
-            if not all_tasks and task != self.config.task:
-                continue
-
-            # Skip certain tasks for verification
-            if task in ["humanevalfixtests-python", "humanevalfixtests-java"]:
-                continue
-
-            print(f"Processing task: {task}")
-            self.config.task = task
-
-            models_to_process = self.config.tokenizer_model_list if all_models else [self.config.model]
-
-            for model in models_to_process:
-                if not all_models and model != self.config.model:
-                    continue
-
-                print(f"Processing model: {model}")
-                self.config.model = model
-                self.config.config_task()
-
-                for i, subtask in enumerate(self.config.task_list):
-                    print(f"Processing subtask {i+1}/{len(self.config.task_list)}: {subtask}")
-                    yield task, model, subtask

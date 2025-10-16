@@ -36,7 +36,7 @@ This environment is used to execute and validate generated code during experimen
 ```bash
 git lfs install
 GIT_LFS_SKIP_SMUDGE=0 git clone https://huggingface.co/datasets/iidai/avatar
-python -m src.tokdrift.split_avatar
+python scripts/split_avatar.py
 python -m src.tokdrift.data_generator --process_avatar
 ```
 

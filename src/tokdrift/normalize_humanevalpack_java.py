@@ -20,9 +20,13 @@ class DataExtractor:
     def __init__(self, config: Config):
         self.config = config
         data_path = f"./data/input/humanevalpack.jsonl"
-        # Load json file
+        # Load jsonl file (JSON Lines format)
+        self.dataset = []
         with open(data_path, 'r', encoding='utf-8') as f:
-            self.dataset = json.load(f)
+            for line in f:
+                line = line.strip()
+                if line:  # Skip empty lines
+                    self.dataset.append(json.loads(line))
 
     
     def _get_tokenize_tokens_and_immutable_identifiers(self, context: str, initial_immutable_identifiers: Set[str]):
@@ -223,9 +227,13 @@ class DataGenerator:
         data_path = f"./data/input/humanevalpack.jsonl"
         # self.output_path = f"./datasets/humanevalpack/base/data/java/data/humanevalpack.jsonl"
         self.output_path = f"./data/input/output.jsonl"
-        # Load json file
+        # Load jsonl file (JSON Lines format)
+        self.dataset = []
         with open(data_path, 'r', encoding='utf-8') as f:
-            self.dataset = json.load(f)
+            for line in f:
+                line = line.strip()
+                if line:  # Skip empty lines
+                    self.dataset.append(json.loads(line))
 
     def process_multi_token_identifiers(self, multi_token_identifiers, context, declaration):
         """Process multi-token identifiers"""
@@ -319,9 +327,10 @@ class DataGenerator:
         new_dataset = self.dataset
         
         # Create a filtered dataset containing only samples with modified contexts
-        filtered_dataset = new_dataset.filter(
-            lambda sample: sample["task_id"] in new_canonical_contexts
-        )
+        filtered_dataset = [
+            sample for sample in new_dataset 
+            if sample["task_id"] in new_canonical_contexts
+        ]
             
         # Update the samples with their modified contexts
         def add_modified_context(sample):
@@ -332,7 +341,7 @@ class DataGenerator:
             sample['declaration'] = new_declarations[task_id]
             return sample
         
-        filtered_dataset = filtered_dataset.map(add_modified_context)
+        filtered_dataset = [add_modified_context(sample) for sample in filtered_dataset]
         
         # Save the new dataset as a JSONL file
         os.makedirs(os.path.dirname(self.output_path), exist_ok=True)
@@ -354,6 +363,8 @@ if __name__ == "__main__":
     # Initialize config
     config = Config()
 
+    # Set language to Java since we're processing Java data
+    config.lang = "java"
     config.target_type = "camel_case"
     config.filter_type = "snake_case"
 

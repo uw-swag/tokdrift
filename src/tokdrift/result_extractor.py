@@ -97,8 +97,6 @@ class ResultExtractor:
         variant_ids = [variant_task.get_task_id(variant_dataset[i]) for i in range(len(variant_dataset))]
 
         task_idx = [baseline_ids.index(variant_id) for variant_id in variant_ids]
-
-        token_boundary_changed_idx = [i for i in range(len(variant_dataset)) if variant_dataset[i]['token_boundary_changed']]
         
         # Use task-specific processing method
         logs_results = self.baseline_task.process_evaluation_logs(
@@ -140,8 +138,6 @@ class ResultExtractor:
                 new_passed_count.append(idx)
 
             total_transformations_processed += len(all_processed_transformations[task_id])
-
-            log_result['fragment_changed'] = True if i in token_boundary_changed_idx else False
 
             baseline_context = self.baseline_task.get_context_only(self.baseline_dataset[idx])
             new_context = variant_task.get_context_only(variant_dataset[i])

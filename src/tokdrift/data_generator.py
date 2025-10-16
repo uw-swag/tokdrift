@@ -738,7 +738,7 @@ class DataGenerator:
         return new_contexts, all_selected_multi_token_identifiers, all_token_boundary_changed, all_modified_tests, all_modified_entry_points, all_modified_declarations
     
     def process_all_combined_token_operators(self, all_combined_token_operators):
-        """Process all combined token operators for Task 2"""
+        """Process all combined token operators"""
         new_contexts = {}
         all_processed_operators = {}
         all_token_boundary_changed = {}
@@ -759,13 +759,13 @@ class DataGenerator:
         return new_contexts, all_processed_operators, all_token_boundary_changed, all_fragment_changed_types
 
 
-    def generate_new_dataset(self, new_contexts, all_token_boundary_changed=None, all_modified_tests=None, all_modified_entry_points=None, all_modified_declarations=None):
-        """Generate new dataset with modified contexts (works for both tasks)"""
+    def generate_new_dataset(self, new_contexts, all_modified_tests=None, all_modified_entry_points=None, all_modified_declarations=None):
+        """Generate new dataset with modified contexts"""
         new_dataset = self.dataset
         
         # Check if dataset is a list or a datasets.Dataset object
         if isinstance(new_dataset, list):
-            # Handle list case (e.g., codenet tasks)
+            # Handle list case
             filtered_data = []
             for sample in new_dataset:
                 task_id = self.task.get_task_id(sample)
@@ -774,8 +774,6 @@ class DataGenerator:
                     modified_sample = sample.copy() if isinstance(sample, dict) else sample
                     if isinstance(modified_sample, dict):
                         modified_sample['modified_context'] = new_contexts[task_id]
-                        if all_token_boundary_changed:
-                            modified_sample['token_boundary_changed'] = all_token_boundary_changed[task_id]
                         if all_modified_tests:
                             modified_sample['modified_test'] = all_modified_tests[task_id]
                         if all_modified_entry_points:
@@ -789,8 +787,6 @@ class DataGenerator:
                             'original_sample': sample,
                             'modified_context': new_contexts[task_id]
                         }
-                        if all_token_boundary_changed:
-                            modified_sample['token_boundary_changed'] = all_token_boundary_changed[task_id]
                         if all_modified_tests:
                             modified_sample['modified_test'] = all_modified_tests[task_id]
                         if all_modified_entry_points:
@@ -809,7 +805,7 @@ class DataGenerator:
             print(f"Saved {len(filtered_data)} samples to {self.config.data_generator_output_dataset}")
             
         else:
-            # Handle Dataset object case (e.g., humanevalpack tasks)
+            # Handle Dataset object case
             # Create a filtered dataset containing only samples with modified contexts
             filtered_dataset = new_dataset.filter(
                 lambda sample: self.task.get_task_id(sample) in new_contexts
@@ -819,8 +815,6 @@ class DataGenerator:
             def add_modified_context(sample):
                 task_id = self.task.get_task_id(sample)
                 sample['modified_context'] = new_contexts[task_id]
-                if all_token_boundary_changed:
-                    sample['token_boundary_changed'] = all_token_boundary_changed[task_id]
                 if all_modified_tests:
                     sample['modified_test'] = all_modified_tests[task_id]
                 if all_modified_entry_points:
@@ -839,12 +833,8 @@ class DataGenerator:
                     f.write(json.dumps(sample) + '\n')
             
             print(f"Saved {len(filtered_dataset)} samples to {self.config.data_generator_output_dataset}")
-    
-    # Keep old method name for backwards compatibility
-    def generate_new_multi_token_dataset(self, new_contexts):
-        """Legacy method name - now calls generate_new_dataset"""
-        return self.generate_new_dataset(new_contexts)
-        
+
+
         
 if __name__ == "__main__":
     import argparse
@@ -853,7 +843,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--all", action="store_true", default=False)
     parser.add_argument("--all_tasks", action="store_true", default=False)
-    parser.add_argument("--all_models", action="store_true", default=False)
     parser.add_argument("--all_multi_token_identifiers", action="store_true", default=False)
     parser.add_argument("--all_target_combinations", action="store_true", default=False)
     parser.add_argument("--process_avatar", action="store_true", default=False)
@@ -864,14 +853,12 @@ if __name__ == "__main__":
 
     if args.all:
         args.all_tasks = True
-        args.all_models = True
-        # args.all_multi_token_identifiers = True
+        args.all_multi_token_identifiers = True
         args.all_target_combinations = True
 
     if args.process_avatar:
         config.all_tasks = ["avatartranslate-python2java", "avatartranslate-java2python"]
         args.all_tasks = True
-        args.all_models = True
         args.all_multi_token_identifiers = True
         args.all_target_combinations = True
 
@@ -880,15 +867,16 @@ if __name__ == "__main__":
 
     for task, model, processing_mode, tokenizer in iterator.iterate_all(
         all_tasks=args.all_tasks,
-        all_models=args.all_models,
+        all_models=False,
         all_multi_token_identifiers=args.all_multi_token_identifiers,
         all_combined_token_operators=args.all_target_combinations,
-        tokenizer_list=True
+        generate_dataset=True
     ):
         # Initialize data processor and generator
         data_extractor = DataExtractor(tokenizer, config)
         data_generator = DataGenerator(tokenizer, config)
 
+        # Naming rewrites
         if processing_mode == "multi_token_identifiers":
             # Extract identifiers
             print(f"Extracting identifiers...")
@@ -900,10 +888,11 @@ if __name__ == "__main__":
 
             # Generate dataset file
             if new_contexts:
-                data_generator.generate_new_dataset(new_contexts, all_token_boundary_changed, all_modified_tests, all_modified_entry_points, all_modified_declarations)
+                data_generator.generate_new_dataset(new_contexts, all_modified_tests, all_modified_entry_points, all_modified_declarations)
             else:
                 print("No contexts were modified. No data generated.")
 
+        # Spacing rewrites
         elif processing_mode == "combined_token_operators":
             # Extract combined token operators
             print(f"Extracting combined token operators...")
@@ -915,6 +904,6 @@ if __name__ == "__main__":
 
             # Generate dataset file
             if new_contexts:
-                data_generator.generate_new_dataset(new_contexts, all_token_boundary_changed)
+                data_generator.generate_new_dataset(new_contexts)
             else:
                 print("No contexts were modified. No data generated.")

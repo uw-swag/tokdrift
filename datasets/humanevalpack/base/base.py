@@ -10,6 +10,7 @@ Each dataset contains 164 samples. And 110, 126, 132 has been modified in python
 All data samples in Java have been modified. Specifically modified entry point in sample 99, 101.
 """
 
+_HOMEPAGE = ""
 
 def get_url(name):
     url = f"data/{name}/data/humanevalpack.jsonl"

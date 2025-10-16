@@ -254,7 +254,7 @@ class HumanEvalPack(Task):
         # Extract base language for stop words (remove variant suffix if present)
         base_language = language.split('-')[0] if '-' in language else language
         if '-' in language:
-            self.DATASET_PATH = f"./{self.DATASET_PATH}/{self.model_name}"
+            self.DATASET_PATH = f"./{self.DATASET_PATH}/var"
         else:
             self.DATASET_PATH = f"./{self.DATASET_PATH}/base"
         stop_words = LANGUAGE_TO_STOP_WORDS[language]

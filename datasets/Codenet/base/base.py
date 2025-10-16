@@ -7,6 +7,8 @@ CodeNet dataset subset for code translation tasks, organized by source language.
 This dataset contains code samples across 3 programming languages and each language has 200 samples. 
 """
 
+_HOMEPAGE = ""
+
 def get_url(name):
     url = f"data/{name}/data/codenet.jsonl"
     return url
