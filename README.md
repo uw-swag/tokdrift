@@ -2,21 +2,18 @@
 
 
 ## Environment Setup
-
-### Prerequisites
+---
+#### Prerequisites
 - [uv](https://github.com/astral-sh/uv) package manager (for testing)
-- Git LFS
-- Python 3.8+
+- Git LFS (for downloading large datasets from Hugging Face)
 
 
-### Setup Environment
+#### Setup Environment
 Run the provided setup script:
 
 ```bash
 bash prepare-env.sh
 ```
-
-### Setup Testing Environment
 
 For testing generated code, set up a virtual environment with required dependencies:
 
@@ -30,19 +27,99 @@ cd ..
 This environment is used to execute and validate generated code during experiments.
 
 ## Dataset Preparation
-
-### Avatar Dataset
+---
+**Download the Avatar dataset from Hugging Face:**
 
 ```bash
 git lfs install
 GIT_LFS_SKIP_SMUDGE=0 git clone https://huggingface.co/datasets/iidai/avatar
+# Normalize the dataset
 python scripts/split_avatar.py
-python -m src.tokdrift.data_generator --process_avatar
 ```
 
-## Running Experiments
+**Generate rewrite dataset for Avatar tasks only:**
 
-### Environment Variables
+```bash
+python -m src.tokdrift.data_generator --process_avatar
+# Move the dataset config file to the datasets folder
+mv ./data/input/avatar/var.py ./datasets/avatar/var/var.py
+```
+
+(Optional) Generate rewrite dataset for all tasks (already prepared for humaneval and codenet tasks):
+
+```bash
+python -m src.tokdrift.data_generator --all
+```
+
+## Example Scripts
+---
+
+Two example scripts for running baseline and variant experiments are provided in the [scripts](scripts) directory:
+
+- [`baseline_example.sh`](scripts/baseline_example.sh) - Example for running baseline experiments
+- [`variant_example.sh`](scripts/variant_example.sh) - Example for running variant experiments
+
+For detailed usage instructions, see the [Running Experiments](#running-experiments) and [Task Variants](#task-variants) sections below.
+
+## Result Analysis
+---
+After running experiments, analyze the results using the following commands:
+
+#### Extract All Result Datapoints
+
+First, extract all result datapoints from the log files in the output directory:
+
+```bash
+python -m src.tokdrift.result_extractor --all
+```
+
+This processes all tasks, models, naming variants, and spacing variants to generate evaluation JSON files with detailed result datapoints.
+
+#### Summarize Results to CSV
+
+Generate CSV summary files for all results:
+
+```bash
+python -m src.tokdrift.result_evaluator --sum_to_csv
+```
+
+This creates comprehensive CSV files in `./data/output/` containing:
+- Accuracy results
+- Accuracy deltas comparing baseline vs variant
+- Sensitivity analysis across all variants
+- Per-task and per-model breakdowns
+
+#### Additional Analysis Options
+
+**Get Summary and Sensitivity Results:**
+
+```bash
+python -m src.tokdrift.result_evaluator --diff
+```
+
+This outputs:
+- Total number of processed tasks across all experiments
+- Sensitivity results showing how naming and spacing variants affect task results
+- Including breakdown by fragment change types (merged, split, mixed, unchanged)
+
+Output files are saved to:
+- `./data/output/sensitivity/` - Sensitivity percentages
+- `./data/output/sample_info/` - Sample counts and statistics
+
+**Wilcoxon Signed-Rank Test:**
+
+Test the statistical significance of performance differences between various model sizes within one model series:
+
+```bash
+python -m src.tokdrift.result_evaluator --wilcoxon_test
+```
+
+This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity to token boundary changes.
+
+
+## Running Experiments
+---
+#### Environment Variables
 
 Set these variables before running experiments:
 
@@ -60,9 +137,11 @@ METRIC_OUTPUT_PATH="path/to/save/metrics"
 HIDDEN_STATES_SAVE_PATH="path/to/save/hidden_states"
 ```
 
-### HumanEval Explain Tasks (Two-Stage)
+*Note that tokenizer's behavior varies across different model series. Special tokenizers may raise errors when analyzing the results (fragment analysis).* 
 
-This task requires two stages: describe then synthesize.
+#### HumanEval Explain Tasks (Two-Stage)
+
+Following the setup in [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness), this task requires two stages: describe then synthesize.
 
 **Stage 1: Describe**
 
@@ -111,7 +190,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   --max_memory_per_gpu "auto"
 ```
 
-### Other Tasks (Single-Stage)
+#### Other Tasks (Single-Stage)
 
 For tasks like CodeNet Translate, Avatar Translate, and HumanEval Fix Tests:
 
@@ -140,8 +219,8 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
 ```
 
 ## Task Variants
-
-### HumanEval Fix Task
+---
+#### HumanEval Fix Task
 
 For HumanEval Fix tasks with variants:
 
@@ -155,7 +234,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   [other parameters...]
 ```
 
-### Other Tasks with Variants
+#### Other Tasks with Variants
 
 For CodeNet Translate, Avatar Translate, and other tasks:
 
@@ -169,7 +248,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   [other parameters...]
 ```
 
-### Available Variants
+#### Available Variants
 
 - `snake_case`
 - `pascal_case`

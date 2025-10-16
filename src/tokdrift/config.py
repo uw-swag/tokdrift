@@ -29,8 +29,8 @@ class Config:
             "humanevalexplaindescribe-java",
             "humanevalfixtests-python",
             "humanevalfixtests-java",
-            # "avatartranslate-python2java",
-            # "avatartranslate-java2python",
+            "avatartranslate-python2java",
+            "avatartranslate-java2python",
             "codenettranslate-python2java",
             "codenettranslate-java2python",
         ]

@@ -4,15 +4,13 @@ import datasets
 
 
 _DESCRIPTION = """
-Modified CodeNet dataset subset for code translation tasks, organized by source language.
-This dataset contains code translation pairs across 2 programming languages.
-Each language has 200 samples.
+Modified Avatar dataset for code translation tasks.
 """
 
 _HOMEPAGE = ""
 
 def get_url(name):
-    url = f"data/{name}/data/codenet.jsonl"
+    url = f"data/{name}/data/avatar.jsonl"
     return url
 
 def split_generator(dl_manager, name):
@@ -26,277 +24,277 @@ def split_generator(dl_manager, name):
         )
     ]
 
-class CodenetConfig(datasets.BuilderConfig):
+class AvatarConfig(datasets.BuilderConfig):
     """BuilderConfig """
 
     def __init__(self, name, description, features, **kwargs):
-        super(CodenetConfig, self).__init__(version=datasets.Version("1.0.0", ""), **kwargs)
+        super(AvatarConfig, self).__init__(version=datasets.Version("1.0.0", ""), **kwargs)
         self.name = name
         self.description = description
         self.features = features
 
 
-class Codenet(datasets.GeneratorBasedBuilder):
+class Avatar(datasets.GeneratorBasedBuilder):
     VERSION = datasets.Version("1.0.0")
     BUILDER_CONFIGS = [
-        CodenetConfig(
+        AvatarConfig(
             name="python",
-            description="Python CodeNet",
+            description="Python Avatar",
             features=[
                 "id", "code", "test_IO"
             ]
         ),      
-        CodenetConfig(
+        AvatarConfig(
             name="java",
-            description="Java CodeNet",
+            description="Java Avatar",
             features=[
                 "id", "code", "test_IO"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp",
-            description="C++ CodeNet",
+            description="C++ Avatar",
             features=[
                 "id", "code", "test_IO"
             ]
         ),
         # Python naming convention variants
-        CodenetConfig(
+        AvatarConfig(
             name="python-camel_case",
-            description="Python CodeNet with camel case",
+            description="Python Avatar with camel case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-pascal_case",
-            description="Python CodeNet with pascal case",
+            description="Python Avatar with pascal case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-screaming_snake_case",
-            description="Python CodeNet with screaming snake case",
+            description="Python Avatar with screaming snake case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
         # Python combined token operator variants
-        CodenetConfig(
+        AvatarConfig(
             name="python-lparentheses_name",
-            description="Python CodeNet with left parentheses and name",
+            description="Python Avatar with left parentheses and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-lparentheses_rparentheses",
-            description="Python CodeNet with left parentheses and right parentheses",
+            description="Python Avatar with left parentheses and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-rparentheses_colon",
-            description="Python CodeNet with right parentheses and colon",
+            description="Python Avatar with right parentheses and colon",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-rparentheses_rparentheses",
-            description="Python CodeNet with right parentheses and right parentheses",
+            description="Python Avatar with right parentheses and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-lsquarebracket_name",
-            description="Python CodeNet with left square bracket and name",
+            description="Python Avatar with left square bracket and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-period_name",
-            description="Python CodeNet with period and name",
+            description="Python Avatar with period and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-rsquarebracket_rparentheses",
-            description="Python CodeNet with right square bracket and right parentheses",
+            description="Python Avatar with right square bracket and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-op_lsquarebracket",
-            description="Python CodeNet with operator and left square bracket",
+            description="Python Avatar with operator and left square bracket",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-op_rsquarebracket",
-            description="Python CodeNet with operator and right square bracket",
+            description="Python Avatar with operator and right square bracket",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-op_dash",
-            description="Python CodeNet with operator and dash",
+            description="Python Avatar with operator and dash",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-op_name",
-            description="Python CodeNet with operator and name",
+            description="Python Avatar with operator and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="python-op_all",
-            description="Python CodeNet with operator and all",
+            description="Python Avatar with operator and all",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
         # Java naming convention variants
-        CodenetConfig(
+        AvatarConfig(
             name="java-snake_case",
-            description="Java CodeNet with snake case",
+            description="Java Avatar with snake case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-pascal_case",
-            description="Java CodeNet with pascal case",
+            description="Java Avatar with pascal case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-screaming_snake_case",
-            description="Java CodeNet with screaming snake case",
+            description="Java Avatar with screaming snake case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
         # Java combined token operator variants
-        CodenetConfig(
+        AvatarConfig(
             name="java-rparentheses_semicolon",
-            description="Java CodeNet with right parentheses and semicolon",
+            description="Java Avatar with right parentheses and semicolon",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-lparentheses_name",
-            description="Java CodeNet with left parentheses and name",
+            description="Java Avatar with left parentheses and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-lparentheses_rparentheses",
-            description="Java CodeNet with left parentheses and right parentheses",
+            description="Java Avatar with left parentheses and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-rparentheses_rparentheses",
-            description="Java CodeNet with right parentheses and right parentheses",
+            description="Java Avatar with right parentheses and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-period_name",
-            description="Java CodeNet with period and name",
+            description="Java Avatar with period and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-period_asterisk",
-            description="Java CodeNet with period and asterisk",
+            description="Java Avatar with period and asterisk",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-double_plus_rparentheses",
-            description="Java CodeNet with double plus and right parentheses",
+            description="Java Avatar with double plus and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-rparentheses_period",
-            description="Java CodeNet with right parentheses and period",
+            description="Java Avatar with right parentheses and period",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-op_semicolon",
-            description="Java CodeNet with operator and semicolon",
+            description="Java Avatar with operator and semicolon",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-op_lparentheses",
-            description="Java CodeNet with operator and left parentheses",
+            description="Java Avatar with operator and left parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-op_name",
-            description="Java CodeNet with operator and name",
+            description="Java Avatar with operator and name",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="java-op_all",
-            description="Java CodeNet with operator and all",
+            description="Java Avatar with operator and all",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
         # C++ naming convention variants
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-snake_case",
             description="C++ Avatar with snake case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-camel_case",
             description="C++ Avatar with camel case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-pascal_case",
             description="C++ Avatar with pascal case",
             features=[
                 "id", "code", "test_IO", "modified_context", "token_boundary_changed"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-screaming_snake_case",
             description="C++ Avatar with screaming snake case",
             features=[
@@ -304,58 +302,58 @@ class Codenet(datasets.GeneratorBasedBuilder):
             ]
         ),
         # C++ combined token operator variants
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-lparentheses_name",
-            description="C++ CodeNet with left parentheses and name",
+            description="C++ Avatar with left parentheses and name",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-rparentheses_colon",
-            description="C++ CodeNet with right parentheses and colon",
+            description="C++ Avatar with right parentheses and colon",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-rparentheses_rparentheses",
-            description="C++ CodeNet with right parentheses and right parentheses",
+            description="C++ Avatar with right parentheses and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-lsquarebracket_name",
-            description="C++ CodeNet with left square bracket and name",
+            description="C++ Avatar with left square bracket and name",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-period_name",
-            description="C++ CodeNet with period and name",
+            description="C++ Avatar with period and name",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-rsquarebracket_rparentheses",
-            description="C++ CodeNet with right square bracket and right parentheses",
+            description="C++ Avatar with right square bracket and right parentheses",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-op_dash",
-            description="C++ CodeNet with operator and dash",
+            description="C++ Avatar with operator and dash",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]
         ),
-        CodenetConfig(
+        AvatarConfig(
             name="cpp-op_name",
-            description="C++ CodeNet with operator and name",
+            description="C++ Avatar with operator and name",
             features=[
                 "id", "code", "test_IO", "modified_context"
             ]

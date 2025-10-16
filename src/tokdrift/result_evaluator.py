@@ -573,7 +573,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Evaluate TokenDrift results")
     parser.add_argument("--task", help="Process a specific task name", default=None)
-    parser.add_argument("--diff", action="store_true", help="Process diff results", default=False)
+    parser.add_argument("--diff", action="store_true", help="Process all results and sensitivity analysis", default=False)
     parser.add_argument("--spacing_transformations", action="store_true", help="Output combined transformations", default=False)
     parser.add_argument("--wilcoxon_test", action="store_true", help="Output wilcoxon signed-rank test", default=False)
     parser.add_argument("--example", action="store_true", help="Output target output", default=False)
