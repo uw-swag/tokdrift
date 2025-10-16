@@ -290,7 +290,7 @@ Test the statistical significance of performance differences between various mod
 python -m src.tokdrift.result_evaluator --wilcoxon_test
 ```
 
-This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity.
+This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if smaller models show significantly different sensitivity.
 
 <b><ins>Vector Visualization</ins></b>:
 
