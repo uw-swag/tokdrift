@@ -33,7 +33,7 @@ This environment is used to execute and validate generated code during experimen
 
 ## ✏️ Dataset Preparation
 
-**Download the Avatar dataset from Hugging Face:**
+Download the Avatar dataset from Hugging Face:
 
 ```bash
 cd datasets
@@ -45,7 +45,7 @@ mv ./data/input/avatar/base.py ./datasets/avatar/base/base.py
 cd ..
 ```
 
-**Generate rewrite dataset for Avatar tasks only:**
+Generate rewrite dataset for Avatar tasks only:
 
 ```bash
 python -m src.tokdrift.data_generator --process_avatar
@@ -170,6 +170,8 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   --max_memory_per_gpu "auto"
 ```
 
+*Storing hidden states is currently not supported when using model parallelism.*
+
 </details>
 
 <details close>
@@ -237,7 +239,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
 ## 📝 Result Analysis
 After running experiments, analyze the results using the following commands:
 
-#### Extract All Result Datapoints
+### Extract All Result Datapoints
 
 First, extract all result datapoints from the log files in the output directory:
 
@@ -247,7 +249,7 @@ python -m src.tokdrift.result_extractor --all
 
 This processes all tasks, models, naming variants, and spacing variants to generate evaluation JSON files with detailed result datapoints.
 
-#### Summarize Results to CSV
+### Summarize Results to CSV
 
 Generate CSV summary files for all results:
 
@@ -261,7 +263,7 @@ This creates comprehensive CSV files in `./data/output/` containing:
 - Sensitivity analysis across all variants
 - Per-task and per-model breakdowns
 
-#### Additional Analysis Options
+### Additional Analysis Options
 
 Utilize [`result_evaluator.py`](src/tokdrift/result_evaluator.py) to gather all result datapoints for sensitivity analysis. 
 
