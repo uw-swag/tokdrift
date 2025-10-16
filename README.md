@@ -1,4 +1,4 @@
-<h1 align="center"> TokDrift </h1>
+<h1 align="center"> TokDrift: When Code Tokens Meet NL Tokenizers </h1>
 
 <p align="center">
   <img src="figures/example.jpg" alt="TokDrift Overview" width="100%">
@@ -62,10 +62,10 @@ Two example scripts for running baseline and variant experiments are provided in
 - [`baseline_example.sh`](scripts/baseline_example.sh) - Example for running baseline experiments
 - [`variant_example.sh`](scripts/variant_example.sh) - Example for running variant experiments
 
-<u>Please refer to the following sections for detailed usage instructions.</u>
+**<u>Please refer to the following sections (click to expand) for detailed usage instructions.</u>**
 
 <details close>
-<summary><b>📌 Running Experiments</b></summary>
+<summary><b><font size="5">📌 Running Experiments</font></b></summary>
 
 #### Environment Variables
 
@@ -169,7 +169,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
 </details>
 
 <details close>
-<summary><b>📌 Task Variants</b></summary>
+<summary><b><font size="5">📌 Task Variants</font></b></summary>
 
 #### HumanEval Fix Task
 
