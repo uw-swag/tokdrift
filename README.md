@@ -2,7 +2,6 @@
 
 
 ## Environment Setup
----
 #### Prerequisites
 - [uv](https://github.com/astral-sh/uv) package manager (for testing)
 - Git LFS (for downloading large datasets from Hugging Face)
@@ -26,8 +25,9 @@ cd ..
 
 This environment is used to execute and validate generated code during experiments.
 
-## Dataset Preparation
 ---
+## Dataset Preparation
+
 **Download the Avatar dataset from Hugging Face:**
 
 ```bash
@@ -51,18 +51,18 @@ mv ./data/input/avatar/var.py ./datasets/avatar/var/var.py
 python -m src.tokdrift.data_generator --all
 ```
 
-## Example Scripts
 ---
+## Example Scripts
 
-Two example scripts for running baseline and variant experiments are provided in the [scripts](scripts) directory:
+Two example scripts for running baseline and variant experiments are provided in the [`scripts`](scripts) directory:
 
 - [`baseline_example.sh`](scripts/baseline_example.sh) - Example for running baseline experiments
 - [`variant_example.sh`](scripts/variant_example.sh) - Example for running variant experiments
 
 For detailed usage instructions, see the [Running Experiments](#running-experiments) and [Task Variants](#task-variants) sections below.
 
-## Result Analysis
 ---
+## Result Analysis
 After running experiments, analyze the results using the following commands:
 
 #### Extract All Result Datapoints
@@ -117,8 +117,8 @@ python -m src.tokdrift.result_evaluator --wilcoxon_test
 This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity to token boundary changes.
 
 
-## Running Experiments
 ---
+## Running Experiments
 #### Environment Variables
 
 Set these variables before running experiments:
@@ -218,8 +218,8 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   --max_memory_per_gpu "auto"
 ```
 
-## Task Variants
 ---
+## Task Variants
 #### HumanEval Fix Task
 
 For HumanEval Fix tasks with variants:
