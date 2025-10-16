@@ -172,7 +172,7 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
 </details>
 
 <details close>
-<summary><b><font size="5">📌 Task Variants</font></b></summary>
+<summary><b><font size="5">📍 Task Variants</font></b></summary>
 
 #### HumanEval Fix Task
 
@@ -305,7 +305,7 @@ python -m src.tokdrift.vector_visualizer --similarity --model "deepseek-coder-33
 ```
 
 <details close>
-<summary><b><font size="5">Example: 2D Visualizations (t-SNE)</font></b></summary>
+<summary><b><font size="5">🎇 Example: 2D Visualizations (t-SNE)</font></b></summary>
 
 <table>
   <tr>
@@ -327,7 +327,7 @@ python -m src.tokdrift.vector_visualizer --similarity --model "deepseek-coder-33
 </details>
 
 <details close>
-<summary><b><font size="5">Example: 3D Visualizations (PCA)</font></b></summary>
+<summary><b><font size="5">🎆 Example: 3D Visualizations (PCA)</font></b></summary>
 
 <table>
   <tr>
@@ -348,7 +348,7 @@ python -m src.tokdrift.vector_visualizer --similarity --model "deepseek-coder-33
 
 </details>
 
-## 🎇 Acknowledgements
+## 🍻 Acknowledgements
 
 This project builds upon and is inspired by several excellent codebases:
 
