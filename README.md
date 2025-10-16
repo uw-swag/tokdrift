@@ -1,7 +1,12 @@
-# TokDrift
+<h1 align="center"> TokDrift </h1>
 
+<p align="center">
+  <img src="figures/example.jpg" alt="TokDrift Overview" width="100%">
+</p>
 
-## Environment Setup
+This is the repository for the paper [TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar](https://github.com/uw-swag/tokdrift). TokDrift is a framework for evaluating various code-related tasks that applies semantic-preserving rewrite rules. 
+
+## ⚙️ Environment Setup
 #### Prerequisites
 - [uv](https://github.com/astral-sh/uv) package manager (for testing)
 - Git LFS (for downloading large datasets from Hugging Face)
@@ -25,7 +30,7 @@ cd ..
 
 This environment is used to execute and validate generated code during experiments.
 
-## Dataset Preparation
+## ✏️ Dataset Preparation
 
 **Download the Avatar dataset from Hugging Face:**
 
@@ -50,71 +55,18 @@ mv ./data/input/avatar/var.py ./datasets/avatar/var/var.py
 python -m src.tokdrift.data_generator --all
 ```
 
-## Example Scripts
+## 💡 Example Scripts
 
 Two example scripts for running baseline and variant experiments are provided in the [`scripts`](scripts) directory:
 
 - [`baseline_example.sh`](scripts/baseline_example.sh) - Example for running baseline experiments
 - [`variant_example.sh`](scripts/variant_example.sh) - Example for running variant experiments
 
-For detailed usage instructions, see the [Running Experiments](#running-experiments) and [Task Variants](#task-variants) sections below.
+<u>Please refer to the following sections for detailed usage instructions.</u>
 
-## Result Analysis
-After running experiments, analyze the results using the following commands:
+<details close>
+<summary><b>📌 Running Experiments</b></summary>
 
-#### Extract All Result Datapoints
-
-First, extract all result datapoints from the log files in the output directory:
-
-```bash
-python -m src.tokdrift.result_extractor --all
-```
-
-This processes all tasks, models, naming variants, and spacing variants to generate evaluation JSON files with detailed result datapoints.
-
-#### Summarize Results to CSV
-
-Generate CSV summary files for all results:
-
-```bash
-python -m src.tokdrift.result_evaluator --sum_to_csv
-```
-
-This creates comprehensive CSV files in `./data/output/` containing:
-- Accuracy results
-- Accuracy deltas comparing baseline vs variant
-- Sensitivity analysis across all variants
-- Per-task and per-model breakdowns
-
-#### Additional Analysis Options
-
-**Get Summary and Sensitivity Results:**
-
-```bash
-python -m src.tokdrift.result_evaluator --diff
-```
-
-This outputs:
-- Total number of processed tasks across all experiments
-- Sensitivity results showing how naming and spacing variants affect task results
-- Including breakdown by fragment change types (merged, split, mixed, unchanged)
-
-Output files are saved to:
-- `./data/output/sensitivity/` - Sensitivity percentages
-- `./data/output/sample_info/` - Sample counts and statistics
-
-**Wilcoxon Signed-Rank Test:**
-
-Test the statistical significance of performance differences between various model sizes within one model series:
-
-```bash
-python -m src.tokdrift.result_evaluator --wilcoxon_test
-```
-
-This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity to token boundary changes.
-
-
-## Running Experiments
 #### Environment Variables
 
 Set these variables before running experiments:
@@ -133,7 +85,7 @@ METRIC_OUTPUT_PATH="path/to/save/metrics"
 HIDDEN_STATES_SAVE_PATH="path/to/save/hidden_states"
 ```
 
-*Note that tokenizer's behavior varies across different model series. Special tokenizers may raise errors when analyzing the results (fragment analysis).* 
+*Note that tokenizer's behavior varies across different model series. Special tokenizers may raise errors when analyzing the results (fragment analysis).*
 
 #### HumanEval Explain Tasks (Two-Stage)
 
@@ -214,7 +166,11 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
   --max_memory_per_gpu "auto"
 ```
 
-## Task Variants
+</details>
+
+<details close>
+<summary><b>📌 Task Variants</b></summary>
+
 #### HumanEval Fix Task
 
 For HumanEval Fix tasks with variants:
@@ -267,4 +223,74 @@ accelerate launch --num_processes 1 -m src.tokdrift.run_experiments \
 - `lparentheses_name`
 - `op_name`
 - `op_all`
+
+<p align="center">
+  <img src="figures/table_example.png" alt="Rewrite Rules Supported by TokDrift" width="100%">
+</p>
+
+</details>
+
+## 📝 Result Analysis
+After running experiments, analyze the results using the following commands:
+
+#### Extract All Result Datapoints
+
+First, extract all result datapoints from the log files in the output directory:
+
+```bash
+python -m src.tokdrift.result_extractor --all
+```
+
+This processes all tasks, models, naming variants, and spacing variants to generate evaluation JSON files with detailed result datapoints.
+
+#### Summarize Results to CSV
+
+Generate CSV summary files for all results:
+
+```bash
+python -m src.tokdrift.result_evaluator --sum_to_csv
+```
+
+This creates comprehensive CSV files in `./data/output/` containing:
+- Accuracy results
+- Accuracy deltas comparing baseline vs variant
+- Sensitivity analysis across all variants
+- Per-task and per-model breakdowns
+
+#### Additional Analysis Options
+
+**Get Summary and Sensitivity Results:**
+
+```bash
+python -m src.tokdrift.result_evaluator --diff
+```
+
+This outputs:
+- Total number of processed tasks across all experiments
+- Sensitivity results showing how naming and spacing variants affect task results
+- Including breakdown by fragment change types (merged, split, mixed, unchanged)
+
+Output files are saved to:
+- `./data/output/sensitivity/` - Sensitivity percentages
+- `./data/output/sample_info/` - Sample counts and statistics
+
+**Wilcoxon Signed-Rank Test:**
+
+Test the statistical significance of performance differences between various model sizes within one model series:
+
+```bash
+python -m src.tokdrift.result_evaluator --wilcoxon_test
+```
+
+This compares small, medium, and large model variants (e.g., Llama-3 3B vs 8B vs 70B) to determine if larger models show significantly different sensitivity to token boundary changes.
+
+## 🎇 Acknowledgements
+
+This project builds upon and is inspired by several excellent codebases:
+
+- [bigcode-evaluation-harness](https://github.com/bigcode-project/bigcode-evaluation-harness) - Evaluation framework for code generation models
+- [antlr4](https://github.com/antlr/antlr4) - Programming language parser
+- [grammars-v4](https://github.com/antlr/grammars-v4) - Grammars written for ANTLR v4
+
+Please open an issue if you run into any problems or have any suggestions. 
 
