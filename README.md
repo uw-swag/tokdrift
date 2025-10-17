@@ -1,10 +1,10 @@
-<h1 align="center"> TokDrift: When Code Tokens Meet NL Tokenizers </h1>
+<h1 align="center"> TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar </h1>
 
 <p align="center">
   <img src="figures/example.jpg" alt="TokDrift Overview" width="100%">
 </p>
 
-This is the code repository for the paper [TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar](https://github.com/uw-swag/tokdrift). TokDrift is a framework designed to apply semantic-preserving rewrite rules and measure their influence on various code-related tasks.
+This is the code repository for the paper [TokDrift: When LLM Speaks in Subwords but Code Speaks in Grammar](https://arxiv.org/pdf/2510.14972). TokDrift is a framework designed to apply semantic-preserving rewrite rules and measure their influence on various code-related tasks.
 
 ## ⚙️ Environment Setup
 
@@ -361,3 +361,14 @@ This project builds upon and is inspired by several excellent codebases:
 
 Please open an issue if you run into any problems or have any suggestions. 
 
+## 📄 Citation
+
+```bibtex
+@article{YinxiETAL25TokDrift,
+  title={{TokDrift}: When {LLM} Speaks in Subwords but Code Speaks in Grammar}, 
+  author={Yinxi Li and Yuntian Deng and Pengyu Nie},
+  journal={arXiv preprint arXiv:2510.14972},
+  year={2025},
+  url={https://arxiv.org/abs/2510.14972},
+}
+```
