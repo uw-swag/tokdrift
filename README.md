@@ -39,10 +39,10 @@ Download the Avatar dataset from Hugging Face:
 cd datasets
 # requires Git LFS installed
 GIT_LFS_SKIP_SMUDGE=0 git clone https://huggingface.co/datasets/iidai/avatar
+cd ..
 # Normalize the dataset
 python scripts/split_avatar.py
 mv ./data/input/avatar/base.py ./datasets/avatar/base/base.py
-cd ..
 ```
 
 Generate rewrite dataset for Avatar tasks only:
