@@ -67,8 +67,8 @@ def create_all_tasks():
 
 def create_task(name, source_lang, target_lang):
     class AvatarTranslation(AvatarTranslationBase):
-        def __init__(self, source_lang=source_lang, target_lang=target_lang, prompt="instruct", model_name=None):
-            super().__init__(source_lang=source_lang, target_lang=target_lang, prompt=prompt, model_name=model_name)
+        def __init__(self, source_lang=source_lang, target_lang=target_lang, prompt="instruct"):
+            super().__init__(source_lang=source_lang, target_lang=target_lang, prompt=prompt)
     
     if name == "translate":
         return AvatarTranslation
@@ -83,10 +83,9 @@ class Avatar(Task):
     DATASET_NAME = None
 
     # FIXME: Not every task has target_lang
-    def __init__(self, source_lang, target_lang, prompt="instruct", model_name=None):
+    def __init__(self, source_lang, target_lang, prompt="instruct"):
         self.source_lang = source_lang
         self.prompt = prompt
-        self.model_name = model_name
         
         if '-' in target_lang:
             # For token changed tasks

@@ -25,14 +25,18 @@ class Config:
         ]
 
         self.all_tasks = [
-            "humanevalexplaindescribe-python",
-            "humanevalexplaindescribe-java",
-            "humanevalfixtests-python",
-            "humanevalfixtests-java",
-            "avatartranslate-python2java",
-            "avatartranslate-java2python",
-            "codenettranslate-python2java",
-            "codenettranslate-java2python",
+            # "humanevalexplaindescribe-python",
+            # "humanevalexplaindescribe-java",
+            "humanevalexplaindescribe-cpp",
+            # "humanevalfixtests-python",
+            # "humanevalfixtests-java",
+            "humanevalfixtests-cpp",
+            # "avatartranslate-python2java",
+            # "avatartranslate-java2python",
+            "codenettranslate-cpp2python",
+            # "codenettranslate-cpp2java",
+            # "codenettranslate-python2java",
+            # "codenettranslate-java2python",
         ]
 
         # Model Selection
@@ -145,6 +149,15 @@ class Config:
                 [('OP', 'NAME')],          # any operator + name
                 [('OP', 'ALL')],          # any operator + all
             ]
+        elif self.lang == "cpp":
+            self.all_target_combinations = [
+                [('OP', ';')],
+                [(')', ')')],
+                [('(', ')')],
+                [('(', 'NAME')],
+                [('OP', 'NAME')],
+                [('OP', 'ALL')],
+            ]
         else:
             raise ValueError(f"Invalid language: {self.lang}")
         
@@ -209,6 +222,9 @@ class Config:
         elif self.lang == "java":
             self.target_types = ["snake_case", "pascal_case", "screaming_snake_case"]
             self.filter_type = "camel_case"
+        elif self.lang == "cpp":
+            self.target_types = ["camel_case", "pascal_case", "screaming_snake_case"]
+            self.filter_type = "snake_case"
         else:
             raise ValueError(f"Unsupported source language: {self.lang}")
 
@@ -243,6 +259,15 @@ class Config:
                 "rparentheses_period",         # (')', '.')
                 "op_semicolon",                # ('OP', ';')
                 "op_lparentheses",             # ('OP', '(')
+                "op_name",                     # ('OP', 'NAME')
+                "op_all"                       # ('OP', 'ALL')
+            ]
+        elif self.lang == "cpp":
+            self.operator_variants = [
+                "rparentheses_rparentheses",   # (')', ')')
+                "lparentheses_rparentheses",   # ('(', ')')
+                "period_name",                  # ('.', 'NAME')
+                "lparentheses_name",           # ('(', 'NAME')
                 "op_name",                     # ('OP', 'NAME')
                 "op_all"                       # ('OP', 'ALL')
             ]

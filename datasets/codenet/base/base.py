@@ -5,6 +5,8 @@ import datasets
 _DESCRIPTION = """
 CodeNet dataset subset for code translation tasks, organized by source language.
 This dataset contains code samples across 3 programming languages and each language has 200 samples. 
+
+Sample 7 has been modified in C++.
 """
 
 _HOMEPAGE = ""

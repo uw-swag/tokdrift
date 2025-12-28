@@ -9,6 +9,7 @@ import tokenize
 from antlr4 import *
 from datasets import load_dataset
 from transformers import AutoTokenizer
+from tqdm import tqdm
 
 from .grammars import *
 from .regex import RegexProcessor
@@ -50,6 +51,20 @@ class DataExtractor:
                 # Get immutable identifiers
                 immutable_identifiers = ImmutableIdentifiersHandler().get_immutable_identifiers(parser, context, initial_immutable_identifiers, self.config.lang)
                 tokens = tokenize.generate_tokens(StringIO(context).readline)
+            elif self.config.lang == "cpp":
+                # Use ANTLR4 to tokenize C++ code
+                input_stream = InputStream(context)
+                lexer = CPP14Lexer(input_stream)
+                stream = CommonTokenStream(lexer)
+                parser = CPP14Parser(stream)
+                # Get immutable identifiers
+                immutable_identifiers = ImmutableIdentifiersHandler().get_immutable_identifiers(parser, context, initial_immutable_identifiers, self.config.lang)
+                stream.fill()
+                tokens = stream.tokens
+                for token in tokens:
+                    if token.type == Token.EOF:
+                        continue
+                    token.type = lexer.symbolicNames[token.type] if token.type < len(lexer.symbolicNames) else 'UNKNOWN'
             else:
                 raise ValueError(f"Unsupported language: {self.config.lang}")
             
@@ -89,6 +104,22 @@ class DataExtractor:
                 test_tokens.append({
                     'token_name': token.text,
                     'identifier': token.type == 'IDENTIFIER',
+                    'pos': f'({token.start}, {token.stop + 1})'
+                })
+        elif self.config.lang == "cpp":
+            input_stream = InputStream(test_case)
+            lexer = CPP14Lexer(input_stream)
+            stream = CommonTokenStream(lexer)
+            parser = CPP14Parser(stream)
+            stream.fill()
+            tokens = stream.tokens
+            for token in tokens:
+                if token.type == Token.EOF:
+                    continue
+                token.type = lexer.symbolicNames[token.type] if token.type < len(lexer.symbolicNames) else 'UNKNOWN'
+                test_tokens.append({
+                    'token_name': token.text,
+                    'identifier': token.type == 'Identifier',
                     'pos': f'({token.start}, {token.stop + 1})'
                 })
         else:
@@ -144,8 +175,8 @@ class DataExtractor:
                         'pos': f'({pos_count}, {pos_count+len(token.string)})'
                     })
                     pos_count += len(token.string)
-                else:
-                    # Process tokens from ANTLR4
+                elif self.config.lang == "java":
+                    # Process tokens from ANTLR4 for Java
                     if token.type == Token.EOF:
                         continue
 
@@ -166,6 +197,44 @@ class DataExtractor:
                                      'LSHIFT_ASSIGN', 'RSHIFT_ASSIGN', 'URSHIFT_ASSIGN',
                                      'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LBRACK', 'RBRACK',
                                      'SEMI', 'DOT', 'COMMA'}
+                    is_operator = token.type in operator_types
+
+                    token.type = 'NAME' if is_identifier else 'OP' if is_operator else token.type
+
+                    tokenize_tokens.append({
+                        'token_name': token_text,
+                        'identifier': is_identifier,
+                        'operator': is_operator,
+                        'type': token.type,
+                        'pos': f'({token.start}, {token.stop + 1})'
+                    })
+                elif self.config.lang == "cpp":
+                    # Process tokens from ANTLR4 for C++
+                    if token.type == Token.EOF:
+                        continue
+
+                    token_text = token.text
+                    cpp_keywords = {'Alignas', 'Alignof', 'Auto', 'Bool', 'Break', 'Case', 'Catch', 'Char',
+                                    'Char16', 'Char32', 'Class', 'Const', 'Constexpr', 'Const_cast', 'Continue',
+                                    'Decltype', 'Default', 'Delete', 'Do', 'Double', 'Dynamic_cast', 'Else',
+                                    'Enum', 'Explicit', 'Export', 'Extern', 'False_', 'Final', 'Float', 'For',
+                                    'Friend', 'Goto', 'If', 'Inline', 'Int', 'Long', 'Mutable', 'Namespace',
+                                    'New', 'Noexcept', 'Nullptr', 'Operator', 'Override', 'Private', 'Protected',
+                                    'Public', 'Register', 'Reinterpret_cast', 'Return', 'Short', 'Signed',
+                                    'Sizeof', 'Static', 'Static_assert', 'Static_cast', 'Struct', 'Switch',
+                                    'Template', 'This', 'Thread_local', 'Throw', 'True_', 'Try', 'Typedef',
+                                    'Typeid_', 'Typename_', 'Union', 'Unsigned', 'Using', 'Virtual', 'Void',
+                                    'Volatile', 'Wchar', 'While'}
+                    is_identifier = (token.type == 'Identifier' or token.type in cpp_keywords) and token_text not in immutable_identifiers
+                    operator_types = {'ASSIGN', 'GT', 'LT', 'BANG', 'TILDE', 'QUESTION', 'COLON',
+                                     'EQUAL', 'LE', 'GE', 'NOTEQUAL', 'AND', 'OR', 'INC', 'DEC',
+                                     'ADD', 'SUB', 'MUL', 'DIV', 'BITAND', 'BITOR', 'CARET', 'MOD',
+                                     'ARROW', 'COLONCOLON', 'ADD_ASSIGN', 'SUB_ASSIGN', 'MUL_ASSIGN',
+                                     'DIV_ASSIGN', 'AND_ASSIGN', 'OR_ASSIGN', 'XOR_ASSIGN', 'MOD_ASSIGN',
+                                     'LSHIFT_ASSIGN', 'RSHIFT_ASSIGN', 'URSHIFT_ASSIGN',
+                                     'LPAREN', 'RPAREN', 'LBRACE', 'RBRACE', 'LBRACK', 'RBRACK',
+                                     'SEMI', 'DOT', 'COMMA', 'LeftParen', 'RightParen', 'LeftBracket',
+                                     'RightBracket', 'LeftBrace', 'RightBrace', 'Semi', 'Ellipsis'}
                     is_operator = token.type in operator_types
 
                     token.type = 'NAME' if is_identifier else 'OP' if is_operator else token.type
@@ -267,11 +336,7 @@ class DataExtractor:
         all_multi_token_identifiers = []
         all_test_identifiers = []
         # Process each sample in the dataset
-        for idx, sample in enumerate(self.dataset):
-            if idx % 50 == 0:
-                print(f"Processing example {idx} of {len(self.dataset)}...")
-            # print(f"Processing example {idx} of {len(self.dataset)}...")
-
+        for idx, sample in enumerate(tqdm(self.dataset, desc="Extracting identifiers")):
             # Get the context only from the dataset sample
             context = self.task.get_context_only(sample)
 
@@ -281,8 +346,20 @@ class DataExtractor:
             # Get the context tokens by tokenize library
             tokenize_tokens = self._get_tokenize_tokens_details(context, immutable_identifiers)
 
+            # Skip this sample if parsing failed
+            if tokenize_tokens is None:
+                all_multi_token_identifiers.append([])
+                all_test_identifiers.append([])
+                continue
+
             # Get the LLM tokens by the LLM tokenizer
             LLM_tokens = self._get_LLM_tokens(context)
+
+            # Skip this sample if tokenization failed
+            if LLM_tokens is None:
+                all_multi_token_identifiers.append([])
+                all_test_identifiers.append([])
+                continue
 
             # Get the multi-token identifiers from the context
             test_case = self.task.get_test_case(sample) if self.config.output_jsonl_file_name == "humanevalpack" else None
@@ -290,7 +367,7 @@ class DataExtractor:
 
             all_multi_token_identifiers.append(multi_token_identifiers)
             all_test_identifiers.append(test_target_identifiers)
-        
+
         return all_multi_token_identifiers, all_test_identifiers
 
     def _get_combined_token_operators(self, context, tokenize_tokens, LLM_tokens):
@@ -397,10 +474,7 @@ class DataExtractor:
     def extract_combined_token_operators(self):
         """Extract combined token operators"""
         all_combined_token_operators = []
-        for idx, sample in enumerate(self.dataset):
-            if idx % 50 == 0:
-                print(f"Processing example {idx} of {len(self.dataset)}...")
-            
+        for idx, sample in enumerate(tqdm(self.dataset, desc="Extracting combined token operators")):
             # Get the context only from the dataset sample
             context = self.task.get_context_only(sample)
 
@@ -410,13 +484,23 @@ class DataExtractor:
             # Get the context tokens by tokenize library
             tokenize_tokens = self._get_tokenize_tokens_details(context, immutable_identifiers)
 
+            # Skip this sample if parsing failed
+            if tokenize_tokens is None:
+                all_combined_token_operators.append([])
+                continue
+
             # Get the LLM tokens by the LLM tokenizer
             LLM_tokens = self._get_LLM_tokens(context)
+
+            # Skip this sample if tokenization failed
+            if LLM_tokens is None:
+                all_combined_token_operators.append([])
+                continue
 
             combined_token_operators = self._get_combined_token_operators(context, tokenize_tokens, LLM_tokens)
 
             all_combined_token_operators.append(combined_token_operators)
-            
+
         return all_combined_token_operators
 
 

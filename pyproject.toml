@@ -1,0 +1,71 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tokdrift"
+version = "0.1.0"
+description = "Tokdrift Project"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "larryinx" }]
+dependencies = [
+    "accelerate==1.8.1",
+    "antlr4-python3-runtime>=4.13.2",
+    "antlr4-tools>=0.2.2",
+    "datasets==3.6.0",
+    "evaluate==0.4.5",
+    "protobuf>=6.33.2",
+    "scikit-learn>=1.8.0",
+    "seaborn>=0.13.2",
+    "torch>=2.5.1",
+    "torchvision>=0.20.1",
+    "transformers==4.56.2",
+]
+
+
+[project.urls]
+Source = "https://github.com/larryinx/tokdrift"
+Issues = "https://github.com/larryinx/tokdrift/issues"
+
+[tool.hatch.version]
+path = "src/tokdrift/__about__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tokdrift"]
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+torchvision = [
+  { index = "pytorch-cu126", marker = "sys_platform == 'linux' or sys_platform == 'win32'" },
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+select = [
+    "E", # pycodestyle error
+    "F", # pyflakes
+    "I", # isort
+]
+
+[tool.ruff.isort]
+known-first-party = ["tokdrift"]
+
+[dependency-groups]
+dev = [
+    "black",
+    "coverage[toml]",
+    "hatch",
+    "pytest-cov",
+    "pytest>=6",
+    "ruff",
+]

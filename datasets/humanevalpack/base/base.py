@@ -8,9 +8,10 @@ HumanEvalPack is a dataset of 164 programming tasks, designed to evaluate the ge
 The dataset is split into 6 languages: Python, JavaScript, Java, Go, C++, and Rust.
 Each dataset contains 164 samples. And 110, 126, 132 has been modified in python.
 All data samples in Java have been modified. Specifically modified entry point in sample 99, 101.
+Sample 38 has been modified in C++.
 """
 
-_HOMEPAGE = ""
+_HOMEPAGE = "homepage_url"
 
 def get_url(name):
     url = f"data/{name}/data/humanevalpack.jsonl"

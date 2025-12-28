@@ -8,10 +8,18 @@ This is the code repository for the paper [TokDrift: When LLM Speaks in Subwords
 
 ## ⚙️ Environment Setup
 
-Run the provided setup script to create a [conda environment](https://www.anaconda.com/docs/getting-started/miniconda/main) with the dependencies:
+#### Option 1: Using uv
 
 ```bash
 bash prepare-env.sh
+```
+
+#### Option 2: Using conda
+
+Run the provided setup script to create a [conda environment](https://www.anaconda.com/docs/getting-started/miniconda/main) with the dependencies:
+
+```bash
+bash prepare-env-conda.sh
 ```
 
 Activate the environment for running the experiments:
@@ -19,6 +27,8 @@ Activate the environment for running the experiments:
 ```bash
 conda activate tokdrift
 ```
+
+#### Prepare the environment for testing generated code
 
 For testing generated code, set up a virtual environment with required dependencies:
 

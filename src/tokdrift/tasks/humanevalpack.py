@@ -218,20 +218,20 @@ def create_all_tasks():
 
 def create_task(language, name):
     class HumanEvalFixTests(HumanEvalFixBase):
-        def __init__(self, language=language, prompt="instruct", model_name=None):
-            super().__init__(language=language, prompt=prompt, with_docs=False, model_name=model_name)
+        def __init__(self, language=language, prompt="instruct"):
+            super().__init__(language=language, prompt=prompt, with_docs=False)
     class HumanEvalFixDocs(HumanEvalFixBase):
-        def __init__(self, language=language, prompt="instruct", model_name=None):            
-            super().__init__(language=language, prompt=prompt, with_docs=True, model_name=model_name)
+        def __init__(self, language=language, prompt="instruct"):            
+            super().__init__(language=language, prompt=prompt, with_docs=True)
     class HumanEvalExplainDescribe(HumanEvalExplainDescribeBase):
-        def __init__(self, language=language, prompt="instruct", model_name=None):
-            super().__init__(language=language, prompt=prompt, with_docs=False, model_name=model_name)   
+        def __init__(self, language=language, prompt="instruct"):
+            super().__init__(language=language, prompt=prompt, with_docs=False)   
     class HumanEvalExplainSynthesize(HumanEvalExplainSynthesizeBase):
-        def __init__(self, language=language, prompt="instruct", load_data_path=None, model_name=None):
-            super().__init__(language=language, prompt=prompt, with_docs=False, load_data_path=load_data_path, model_name=model_name)
+        def __init__(self, language=language, prompt="instruct", load_data_path=None):
+            super().__init__(language=language, prompt=prompt, with_docs=False, load_data_path=load_data_path)
     class HumanEvalSynthesize(HumanEvalSynthesizeBase):
-        def __init__(self, language=language, prompt="instruct", model_name=None):
-            super().__init__(language=language, prompt=prompt, with_docs=True, model_name=model_name)
+        def __init__(self, language=language, prompt="instruct"):
+            super().__init__(language=language, prompt=prompt, with_docs=True)
     
     if name == "fixtests": return HumanEvalFixTests
     elif name == "fixdocs": return HumanEvalFixDocs
@@ -245,11 +245,10 @@ class HumanEvalPack(Task):
     DATASET_PATH = "./datasets/humanevalpack"
     DATASET_NAME = None
 
-    def __init__(self, prompt="instruct", language="python", with_docs=True, model_name=None):
+    def __init__(self, prompt="instruct", language="python", with_docs=True):
         
         self.DATASET_NAME = language
-        self.prompt = prompt        
-        self.model_name = model_name
+        self.prompt = prompt
         
         # Extract base language for stop words (remove variant suffix if present)
         base_language = language.split('-')[0] if '-' in language else language
@@ -359,6 +358,9 @@ class HumanEvalPack(Task):
         # Which would be harder, as it's not the usual way these tokens are tokenized
         # i.e. the model has never seen the token sequence of ['()', 'Ċ', 'ĠĠ'], but only ['()', 'ĊĠĠ']
         # The same holds for Java, JS, Go, Rust, C++ tho the start sequences are slightly different
+
+        # print(prompt)
+        # raise ValueError("Stop here")
         return prompt.strip()
             
     def get_reference(self, doc, get_solution=False):
@@ -663,19 +665,27 @@ class HumanEvalFixBase(HumanEvalPackGenerative):
         prompt_base = self.get_prompt_base(doc)
         entry_point = doc["entry_point"] if "modified_entry_point" not in doc or doc["modified_entry_point"] is None or doc["modified_entry_point"] == "" else doc["modified_entry_point"]
         instruction = f'Fix bugs in {entry_point}.'
-        # FIXME: remove this
-        # print(f"Instruction: {instruction}")
+        base_language = self.DATASET_NAME.split('-')[0] if '-' in self.DATASET_NAME else self.DATASET_NAME
         # Context is modified_context if it exists, otherwise it is prompt_base + buggy_solution
         if "modified_context" in doc and doc["modified_context"] is not None and doc["modified_context"] != "":
+            # context = "```" + base_language + "\n" + doc["modified_context"] + "\n```"
             context = doc["modified_context"]
         else:
+            # context = "```" + base_language + "\n" + prompt_base + doc["buggy_solution"] + "\n```"
             context = prompt_base + doc["buggy_solution"]
+        
+        
         
         if self.with_docs is False: # Add tests as source of ground truth
             if "modified_test" in doc and doc["modified_test"] is not None and doc["modified_test"] != "":
+                # context += "\n" + "```" + base_language + "\n" + doc["modified_test"] + "\n```"
                 context += "\n" + doc["modified_test"]
             else:
+                # context += "\n" + "```" + base_language + "\n" + doc["test"] + "\n```"
                 context += "\n" + doc["test"]
+        
+        if base_language == "python":
+            context = "```python\n" + context + "\n```"
 
         if self.prompt == "file":
             file_name = self.get_filename_with_extension(input_file=doc["entry_point"])
@@ -724,7 +734,8 @@ class HumanEvalFixBase(HumanEvalPackGenerative):
             (not used for Humaneval-Task)
         """
         doc = self.get_dataset()[idx]
-        prompt = self.get_prompt(doc)        
+        prompt = self.get_prompt(doc)
+
         if self.prompt == "diff-carper":
             # Only remove final stopwords like <MSG>
             generation = self.remove_last_block(generation[len(prompt):].rstrip())

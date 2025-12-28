@@ -1,6 +1,7 @@
 from antlr4.tree.Tree import TerminalNode
 from .grammars import JavaLexer, JavaParser
 from .grammars import Python3Lexer, Python3Parser
+from .grammars import CPP14Lexer, CPP14Parser
 from antlr4 import InputStream, CommonTokenStream
 
 
@@ -29,13 +30,17 @@ class ImmutableIdentifiersHandler:
             tuple: (immutable_identifiers_set, declarations_set)
         """
         lang = lang.lower()
-        
+
         if lang == 'java':
             immutable_identifiers, declarations = self.get_java_immutable_identifiers(parser, context)
             immutable_identifiers.difference_update(declarations)
             immutable_identifiers.update(initial_immutable_identifiers)
         elif lang == 'python':
             immutable_identifiers, declarations = self.get_python_immutable_identifiers(parser, context)
+            immutable_identifiers.difference_update(declarations)
+            immutable_identifiers.update(initial_immutable_identifiers)
+        elif lang == 'cpp':
+            immutable_identifiers, declarations = self.get_cpp_immutable_identifiers(parser, context)
             immutable_identifiers.difference_update(declarations)
             immutable_identifiers.update(initial_immutable_identifiers)
         else:
@@ -224,5 +229,143 @@ class ImmutableIdentifiersHandler:
         
         # Start the analysis
         analyze_node(parser.file_input())
-        
-        return unchanging, declarations 
+
+        return unchanging, declarations
+
+    def get_cpp_immutable_identifiers(self, parser, context):
+        """
+        Use rules based on syntactic context to identify immutable identifiers in C++ code.
+
+        Args:
+            parser: The ANTLR4 parser
+            context: The source code as string
+
+        Returns:
+            tuple: (immutable_identifiers_set, declarations_set)
+        """
+
+        unchanging = set()
+        declarations = set()
+
+        # C++ standard library types and common identifiers that should be unchanging
+        cpp_standard_types = {
+            'std', 'string', 'vector', 'map', 'set', 'list', 'deque', 'queue', 'stack',
+            'cout', 'cin', 'cerr', 'endl', 'pair', 'make_pair', 'shared_ptr', 'unique_ptr',
+            'weak_ptr', 'make_shared', 'make_unique', 'nullptr', 'size_t', 'int8_t',
+            'int16_t', 'int32_t', 'int64_t', 'uint8_t', 'uint16_t', 'uint32_t', 'uint64_t'
+        }
+
+        def has_virtual_override_specifier(method_node, context_str):
+            """Check for virtual or override specifiers in method declaration"""
+            try:
+                if hasattr(method_node, 'start') and method_node.start:
+                    method_start = method_node.start.start
+                    # Look backwards and forwards for virtual/override keywords
+                    search_start = max(0, method_start - 100)
+                    search_end = min(len(context_str), method_start + 200)
+                    text_around = context_str[search_start:search_end]
+                    return 'virtual' in text_around or 'override' in text_around
+                return False
+            except:
+                return False
+
+        def analyze_node(node, parent=None, grandparent=None, grandgrandparent=None):
+            """Recursively analyze parse tree nodes"""
+            if isinstance(node, TerminalNode):
+                token = node.getSymbol()
+                if token.type == CPP14Lexer.Identifier:
+                    identifier = token.text
+
+                    # Get the grammatical context
+                    node_rule = parent.getRuleIndex() if parent and hasattr(parent, 'getRuleIndex') else None
+                    parent_rule = grandparent.getRuleIndex() if grandparent and hasattr(grandparent, 'getRuleIndex') else None
+                    grandparent_rule = grandgrandparent.getRuleIndex() if grandgrandparent and hasattr(grandgrandparent, 'getRuleIndex') else None
+
+                    parent_rule_name = parser.ruleNames[parent_rule] if parent_rule is not None else None
+                    grandparent_rule_name = parser.ruleNames[grandparent_rule] if grandparent_rule is not None else None
+
+                    # Rule 1: Standard library types and identifiers
+                    if identifier in cpp_standard_types:
+                        unchanging.add(identifier)
+
+                    # Rule 2: Qualified names (std::vector, namespace::Class)
+                    elif parent_rule_name == 'qualifiedId':
+                        unchanging.add(identifier)
+
+                    # Rule 3: Nested namespace specifier
+                    elif parent_rule_name == 'nestedNameSpecifier':
+                        unchanging.add(identifier)
+
+                    # Rule 4: Type specifiers (int, char, custom types in declarations)
+                    elif parent_rule_name in ['typeSpecifier', 'simpleTypeSpecifier', 'theTypeName', 'trailingTypeSpecifier']:
+                        unchanging.add(identifier)
+
+                    # Rule 5: Namespace names
+                    elif parent_rule_name in ['namespaceName', 'originalNamespaceName']:
+                        unchanging.add(identifier)
+
+                    # Rule 6: Class names in base type specifier
+                    elif parent_rule_name == 'className' or parent_rule_name == 'baseTypeSpecifier':
+                        # If it's used as a type (not being declared), mark as unchanging
+                        # We need to check if this is in a class declaration or elsewhere
+                        if grandparent_rule_name != 'classHead':
+                            unchanging.add(identifier)
+
+                    # Rule 7: Expression contexts (using identifiers, not declaring them)
+                    elif parent_rule_name in ['expression', 'primaryExpression', 'postfixExpression']:
+                        unchanging.add(identifier)
+
+                    # Rule 8: Unary expressions
+                    elif parent_rule_name == 'unaryExpression':
+                        unchanging.add(identifier)
+
+                    # Rule 9: New expressions (constructor calls like new ClassName())
+                    elif parent_rule_name == 'newExpression_' or grandparent_rule_name == 'newTypeId':
+                        unchanging.add(identifier)
+
+                    # Rule 10: Enum names and enumerators
+                    elif parent_rule_name in ['enumName', 'enumerator']:
+                        unchanging.add(identifier)
+
+                    # Rule 11: Typedef names
+                    elif parent_rule_name == 'typedefName':
+                        unchanging.add(identifier)
+
+                    # Rule 12: Class declarations - these are being declared
+                    elif parent_rule_name == 'classHead':
+                        declarations.add(identifier)
+
+                    # Rule 13: Function declarations
+                    elif parent_rule_name == 'declaratorid' and grandparent_rule_name in ['declarator', 'noPointerDeclarator']:
+                        # Check if this is part of a function definition
+                        # If it has virtual/override, it's an override and should be unchanging
+                        has_override = has_virtual_override_specifier(parent, context)
+                        if has_override:
+                            unchanging.add(identifier)
+                        else:
+                            # Check if we're in a function definition context
+                            current = grandgrandparent
+                            depth = 0
+                            while current and depth < 5:
+                                if hasattr(current, 'getRuleIndex'):
+                                    current_rule = current.getRuleIndex()
+                                    if current_rule is not None and parser.ruleNames[current_rule] == 'functionDefinition':
+                                        declarations.add(identifier)
+                                        break
+                                # Try to get parent - this is a simplified approach
+                                depth += 1
+                                break
+                            else:
+                                # Not sure, be conservative and mark as unchanging
+                                unchanging.add(identifier)
+
+            # Recursively process children
+            if hasattr(node, 'getChildCount'):
+                for i in range(node.getChildCount()):
+                    child = node.getChild(i)
+                    analyze_node(child, parent=node, grandparent=parent, grandgrandparent=grandparent)
+
+        # Start the analysis
+        analyze_node(parser.translationUnit())
+
+        return unchanging, declarations

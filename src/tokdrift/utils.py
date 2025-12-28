@@ -107,6 +107,19 @@ class TokenizedDataset(IterableDataset):
             max_length=self.max_length,
             return_token_type_ids=return_token_type_ids,
         )
+
+        # FIXME: debug tokenizer
+        # print(f"prompts: {prompts}")
+        # encoded = self.tokenizer(prompts[0])
+        # print(f"encoded: {encoded.tokens()}")
+        # print(f"outputs: {outputs}")
+        # # Output decoded token list
+        # decoded_token_list = []
+        # for token_id in outputs.input_ids[0]:
+        #     decoded_token_list.append(self.tokenizer.decode(token_id))
+        # print(f"decoded_token_list: {decoded_token_list}")
+        # # print(f"decode: {self.tokenizer.decode(outputs.input_ids[0])}")
+
         if self.has_encoder:
             outputs_encoder = self.tokenizer(
                 prompts_encoder,

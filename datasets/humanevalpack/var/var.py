@@ -505,6 +505,134 @@ class HumanEvalPack(datasets.GeneratorBasedBuilder):
                 "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
             ]
         ),
+        # C++ variants
+        HumanEvalPackConfig(
+            name="cpp-camel_case",
+            description="C++ HumanEvalPack (Camel Case)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-pascal_case",
+            description="C++ HumanEvalPack (Pascal Case)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-screaming_snake_case",
+            description="C++ HumanEvalPack (Screaming Snake Case)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-op_semicolon",
+            description="C++ HumanEvalPack (Operator + Semicolon)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-lparentheses_name",
+            description="C++ HumanEvalPack (Left Parentheses + Name)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-lparentheses_rparentheses",
+            description="C++ HumanEvalPack (Left Parentheses + Right Parentheses)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-rparentheses_rparentheses",
+            description="C++ HumanEvalPack (Right Parentheses + Right Parentheses)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-op_name",
+            description="C++ HumanEvalPack (Operator + Name)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-op_all",
+            description="C++ HumanEvalPack (Operator + All)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction"
+            ]
+        ),
+        # C++ fix variants
+        HumanEvalPackConfig(
+            name="cpp-camel_case-fix",
+            description="C++ HumanEvalPack (Camel Case - Fix)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-pascal_case-fix",
+            description="C++ HumanEvalPack (Pascal Case - Fix)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-screaming_snake_case-fix",
+            description="C++ HumanEvalPack (Screaming Snake Case - Fix)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-op_semicolon-fix",
+            description="C++ HumanEvalPack (Operator + Semicolon)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-rparentheses_rparentheses-fix",
+            description="C++ HumanEvalPack (Right Parentheses + Right Parentheses)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-lparentheses_rparentheses-fix",
+            description="C++ HumanEvalPack (Left Parentheses + Right Parentheses)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-lparentheses_name-fix",
+            description="C++ HumanEvalPack (Left Parentheses + Name)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-op_name-fix",
+            description="C++ HumanEvalPack (Operator + Name)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
+        HumanEvalPackConfig(
+            name="cpp-op_all-fix",
+            description="C++ HumanEvalPack (Operator + All)",
+            features=[
+                "task_id", "prompt", "declaration", "canonical_solution", "buggy_solution", "bug_type", "failure_symptoms", "import", "test_setup", "test", "example_test", "entry_point", "signature", "docstring", "instruction", "modified_context", "token_boundary_changed"
+            ]
+        ),
     ]
     DEFAULT_CONFIG_NAME = "python"
 
