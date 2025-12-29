@@ -28,7 +28,6 @@ class VectorProcessor:
         class Args:
             def __init__(self):
                 self.prompt = prompt
-                self.model = model
                 self.load_data_path = "none"
 
         args = Args()
@@ -230,7 +229,6 @@ class VectorProcessor:
         class Args:
             def __init__(self):
                 self.prompt = prompt
-                self.model = model
                 self.load_data_path = "none"
 
         args = Args()

@@ -435,8 +435,10 @@ class CodenetTranslationBase(CodenetGenerative):
             source_code = doc["modified_context"]
         else:
             source_code = doc["code"]
-        
-        prompt_base = f"{source_lang_name} code:\n```{self.source_lang}\n{source_code}\n```\n\n{target_lang_name} code:\n```{self.target_lang}\n"
+
+        instruction += f"\n{source_lang_name} code:\n```{self.source_lang}\n{source_code}\n```"
+
+        prompt_base = f"{target_lang_name} code:\n```{self.target_lang}\n"
         
         if self.prompt == "instruct":
             prompt = f"{instruction}\n\n{prompt_base}"

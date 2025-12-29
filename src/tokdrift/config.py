@@ -25,17 +25,17 @@ class Config:
         ]
 
         self.all_tasks = [
-            # "humanevalexplaindescribe-python",
+            "humanevalexplaindescribe-python",
             # "humanevalexplaindescribe-java",
             "humanevalexplaindescribe-cpp",
-            # "humanevalfixtests-python",
+            "humanevalfixtests-python",
             # "humanevalfixtests-java",
             "humanevalfixtests-cpp",
-            # "avatartranslate-python2java",
-            # "avatartranslate-java2python",
+            "avatartranslate-python2java",
+            "avatartranslate-java2python",
             "codenettranslate-cpp2python",
             # "codenettranslate-cpp2java",
-            # "codenettranslate-python2java",
+            "codenettranslate-python2java",
             # "codenettranslate-java2python",
         ]
 

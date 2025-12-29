@@ -11,7 +11,7 @@ dataset = load_dataset("./datasets/codenet")["train"]
 
 
 def modify_code(lang: str, code_id: int) -> str:
-    dataset_path = os.path.join("./data/input/datasets/codenet", lang)
+    dataset_path = os.path.join("./data/input/codenet", lang)
     if lang == "java":
         file_path = os.path.join(dataset_path, f"{code_id}.java")
     elif lang == "python":

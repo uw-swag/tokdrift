@@ -788,6 +788,10 @@ class HumanEvalExplainDescribeBase(HumanEvalPack):
         else:
             context = prompt_base + doc["canonical_solution"]
         
+        base_language = self.DATASET_NAME.split('-')[0] if '-' in self.DATASET_NAME else self.DATASET_NAME
+        if base_language == "python":
+            context = "```python\n" + context + "\n```"
+        
         return super().get_prompt("", instruction, context)
 
     def remove_last_block(self, text):

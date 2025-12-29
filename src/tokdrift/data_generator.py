@@ -23,7 +23,7 @@ class DataExtractor:
     def __init__(self, tokenizer: AutoTokenizer, config: Config):
         self.tokenizer = tokenizer
         self.config = config
-        self.task = tasks.get_task(self.config.task, data_preprocessing=True, model=self.config.model)
+        self.task = tasks.get_task(self.config.task, data_preprocessing=True)
         self.dataset = self.task.get_dataset()
     
     def _get_tokenize_tokens_and_immutable_identifiers(self, context: str, initial_immutable_identifiers: Set[str]):
@@ -510,7 +510,7 @@ class DataGenerator:
     def __init__(self, tokenizer: AutoTokenizer, config: Config):
         self.config = config
         self.tokenizer = tokenizer
-        self.task = tasks.get_task(config.task, data_preprocessing=True, model=config.model)
+        self.task = tasks.get_task(config.task, data_preprocessing=True)
         self.dataset = self.task.get_dataset()
 
     def _get_LLM_tokens(self, context: str):
@@ -963,7 +963,6 @@ if __name__ == "__main__":
         # Naming rewrites
         if processing_mode == "multi_token_identifiers":
             # Extract identifiers
-            print(f"Extracting identifiers...")
             all_multi_token_identifiers, all_test_identifiers = data_extractor.extract_new_identifiers()
 
             # Generate new multi-token dataset
@@ -979,7 +978,6 @@ if __name__ == "__main__":
         # Spacing rewrites
         elif processing_mode == "combined_token_operators":
             # Extract combined token operators
-            print(f"Extracting combined token operators...")
             all_combined_token_operators = data_extractor.extract_combined_token_operators()
 
             # Process combined token operators

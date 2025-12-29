@@ -28,7 +28,7 @@ Activate the environment for running the experiments:
 conda activate tokdrift
 ```
 
-#### Prepare the environment for testing generated code
+#### Prepare the environment for testing generated Python code
 
 For testing generated code, set up a virtual environment with required dependencies:
 
@@ -52,15 +52,15 @@ GIT_LFS_SKIP_SMUDGE=0 git clone https://huggingface.co/datasets/iidai/avatar
 cd ..
 # Normalize the dataset
 python scripts/split_avatar.py
-mv ./data/input/avatar/base.py ./datasets/avatar/base/base.py
+cp ./data/input/avatar/base.py ./datasets/avatar/base/base.py
 ```
 
 Generate rewrite dataset for Avatar tasks only:
 
 ```bash
 python -m src.tokdrift.data_generator --process_avatar
-# Move the dataset config file to the datasets folder
-mv ./data/input/avatar/var.py ./datasets/avatar/var/var.py
+# Copy the dataset config file to the datasets folder
+cp ./data/input/avatar/var.py ./datasets/avatar/var/var.py
 ```
 
 (Optional) Generate rewrite dataset for all tasks (already prepared for humaneval and codenet tasks):

@@ -225,6 +225,11 @@ def parse_args():
         default=None,
         help="Path to save the difference between the baseline hidden states and the variant hidden states",
     )
+    parser.add_argument(
+        "--code_lexer_pretokenizer",
+        action="store_true",
+        help="Use the code lexer pretokenizer",
+    )
     return parser.parse_args()
 
 
@@ -350,10 +355,31 @@ def main():
             model.merge_and_unload()
             print("Merge complete.")
 
+        tokenizer_name = args.model
+        if args.code_lexer_pretokenizer and args.tasks.split("-")[1] == "python":
+            if args.model.split("/")[-1].split("-")[0] == "Qwen2.5":
+                tokenizer_name = "qwen"
+            elif args.model.split("/")[-1].split("-")[0] == "deepseek":
+                tokenizer_name = "deepseek"
+            elif args.model.split("/")[-1].split("-")[0] == "Llama":
+                tokenizer_name = "llama"
+            else:
+                raise ValueError(f"Unsupported model for code lexer pretokenizer: {args.model}")
+            from pathlib import Path
+            
+            # Get the current file's directory and add the tokenizers path
+            current_dir = Path(__file__).parent
+            tokenizer_name = current_dir / "tokenizers" / tokenizer_name
+            print(f"Using tokenizer: {tokenizer_name}")
+        elif args.code_lexer_pretokenizer:
+            print("Code lexer pretokenizer is implemented for this language yet, using the default tokenizer")
+        else:
+            print("Using the default tokenizer")
+
         if args.left_padding:
             # left padding is required for some models like chatglm3-6b
             tokenizer = AutoTokenizer.from_pretrained(
-                args.model,
+                tokenizer_name,
                 revision=args.revision,
                 trust_remote_code=args.trust_remote_code,
                 token=args.use_auth_token,
@@ -362,7 +388,7 @@ def main():
         else:
             # used by default for most models
             tokenizer = AutoTokenizer.from_pretrained(
-                args.model,
+                tokenizer_name,
                 revision=args.revision,
                 trust_remote_code=args.trust_remote_code,
                 token=args.use_auth_token,

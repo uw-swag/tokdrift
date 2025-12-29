@@ -17,7 +17,7 @@ class ResultExtractor:
         self.tokenizer = tokenizer
         
         # Load task instance
-        self.baseline_task = tasks.get_task(self.task_name, data_preprocessing=True, model=self.config.model)
+        self.baseline_task = tasks.get_task(self.task_name, data_preprocessing=True)
         self.baseline_dataset = self.baseline_task.get_dataset()
         
         # Determine task type
@@ -87,7 +87,7 @@ class ResultExtractor:
         variant_task_name = f"{self.task_name}-{variant_name}"
         if self.config.output_dataset_name == "humanevalfixtests":
             variant_task_name = f"{self.task_name}-{variant_name}-fix"
-        variant_task = tasks.get_task(variant_task_name, data_preprocessing=True, model=self.config.model)
+        variant_task = tasks.get_task(variant_task_name, data_preprocessing=True)
         variant_dataset = variant_task.get_dataset()
 
         baseline_logs_path = os.path.join(self.baseline_result_dir, "logs.json")
@@ -294,7 +294,7 @@ class ResultExtractor:
                 temp_config.model = full_model_name
                 temp_config.config_task()
                 
-                baseline_task = tasks.get_task(task_name, data_preprocessing=True, model=temp_config.model)
+                baseline_task = tasks.get_task(task_name, data_preprocessing=True)
                 baseline_dataset = baseline_task.get_dataset()
                 
                 # Get all task IDs from baseline dataset

@@ -15,7 +15,7 @@ LANGUAGE_VARIANTS = ["snake_case", "pascal_case", "camel_case", "screaming_snake
 
 
 # Add data_preprocessing argument to get_task()
-def get_task(task_name, args=None, data_preprocessing=False, model=None):
+def get_task(task_name, args=None, data_preprocessing=False):
     try:
         kwargs = {}
         if not data_preprocessing:
@@ -23,13 +23,6 @@ def get_task(task_name, args=None, data_preprocessing=False, model=None):
                 kwargs["prompt"] = args.prompt
             if "load_data_path" in inspect.signature(TASK_REGISTRY[task_name]).parameters:
                 kwargs["load_data_path"] = args.load_data_path
-            if "model_name" in inspect.signature(TASK_REGISTRY[task_name]).parameters:
-                kwargs["model_name"] = "var"
-        else:
-            if model:
-                kwargs["model_name"] = "var"
-            else:
-                raise ValueError("model is required for data_preprocessing")
         return TASK_REGISTRY[task_name](**kwargs)
     except KeyError:
         print("Available tasks:")
