@@ -356,7 +356,8 @@ def main():
             print("Merge complete.")
 
         tokenizer_name = args.model
-        if args.code_lexer_pretokenizer and args.tasks.split("-")[1] == "python":
+        # This is a hardcoded way to check if the language is python
+        if args.code_lexer_pretokenizer and (args.tasks.split("-")[1] == "python" or args.tasks.split("-")[1].split("2")[0] == "python"):
             if args.model.split("/")[-1].split("-")[0] == "Qwen2.5":
                 tokenizer_name = "qwen"
             elif args.model.split("/")[-1].split("-")[0] == "deepseek":
@@ -372,7 +373,7 @@ def main():
             tokenizer_name = current_dir / "tokenizers" / tokenizer_name
             print(f"Using tokenizer: {tokenizer_name}")
         elif args.code_lexer_pretokenizer:
-            print("Code lexer pretokenizer is implemented for this language yet, using the default tokenizer")
+            print("Code lexer pretokenizer is not implemented for this language yet, using the default tokenizer")
         else:
             print("Using the default tokenizer")
 

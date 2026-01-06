@@ -1,4 +1,4 @@
-from tkinter.font import names
+# from tkinter.font import names
 from .config import Config
 from dataclasses import dataclass
 from typing import Optional
@@ -53,6 +53,17 @@ class ResultEvaluator:
 
         # Get the results list
         results = data.get('results', [])
+
+        # Determine variant name based on processing mode
+        if self.config.processing_mode == "multi_token_identifiers":
+            variant = self.config.target_type
+            if self.config.lang in ["python", "cpp"]:
+                output_variant = "snake_case-" + variant
+            if self.config.lang == "java":
+                output_variant = "camel_case-" + variant
+        else:
+            variant = self.config.combination_name
+            output_variant = variant
 
         # Process each data point
         for data_point in results:
@@ -302,7 +313,7 @@ class ResultEvaluator:
             variant = data_point.get('variant', 'unknown')
             if mode == "multi_token_identifiers":
                 lang = data_point.get('lang', 'unknown')
-                if lang == "python":
+                if lang in ["python", "cpp"]:
                     # FIXME: hardcoded for now
                     variant = "snake_case-" + variant
                 if lang == "java":
@@ -347,7 +358,7 @@ class ResultEvaluator:
             variant = data_point.get('variant', 'unknown')
             if mode == "multi_token_identifiers":
                 lang = data_point.get('lang', 'unknown')
-                if lang == "python":
+                if lang in ["python", "cpp"]:
                     variant = "snake_case-" + variant
                 if lang == "java":
                     variant = "camel_case-" + variant
@@ -553,7 +564,7 @@ class ResultEvaluator:
         output_dir = "./data/output/llama_example"
         os.makedirs(output_dir, exist_ok=True)
         if filter_criteria.mode == "multi_token_identifiers":
-            if filter_criteria.lang == "python":
+            if filter_criteria.lang in ["python", "cpp"]:
                 variant = "snake_case-" + filter_criteria.variant
             elif filter_criteria.lang == "java":
                 variant = "camel_case-" + filter_criteria.variant

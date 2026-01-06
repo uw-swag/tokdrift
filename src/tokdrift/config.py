@@ -13,8 +13,8 @@ class Config:
             "deepseek-ai/deepseek-coder-1.3b-instruct",
             "deepseek-ai/deepseek-coder-6.7b-instruct",
             "deepseek-ai/deepseek-coder-33b-instruct",
-            "Qwen/CodeQwen1.5-7B-Chat",
-            "Qwen/Qwen2.5-Coder-7B",
+            # "Qwen/CodeQwen1.5-7B-Chat",
+            # "Qwen/Qwen2.5-Coder-7B",
         ]
 
         self.tokenizer_model_list = [
@@ -26,17 +26,17 @@ class Config:
 
         self.all_tasks = [
             "humanevalexplaindescribe-python",
-            # "humanevalexplaindescribe-java",
+            "humanevalexplaindescribe-java",
             "humanevalexplaindescribe-cpp",
             "humanevalfixtests-python",
-            # "humanevalfixtests-java",
+            "humanevalfixtests-java",
             "humanevalfixtests-cpp",
             "avatartranslate-python2java",
             "avatartranslate-java2python",
-            "codenettranslate-cpp2python",
+            # "codenettranslate-cpp2python",
             # "codenettranslate-cpp2java",
             "codenettranslate-python2java",
-            # "codenettranslate-java2python",
+            "codenettranslate-java2python",
         ]
 
         # Model Selection
@@ -266,7 +266,7 @@ class Config:
             self.operator_variants = [
                 "rparentheses_rparentheses",   # (')', ')')
                 "lparentheses_rparentheses",   # ('(', ')')
-                "period_name",                  # ('.', 'NAME')
+                "op_semicolon",                  # ('.', 'NAME')
                 "lparentheses_name",           # ('(', 'NAME')
                 "op_name",                     # ('OP', 'NAME')
                 "op_all"                       # ('OP', 'ALL')
@@ -377,6 +377,34 @@ class Config:
         java_variants = [f"{self.filter_type}-{tt}" for tt in self.target_types] + self.operator_variants
 
         all_variants = list(set(python_variants + java_variants))
+
+        self.task = "humanevalexplaindescribe-cpp"
+        self.config_task()
+        cpp_variants = [f"{self.filter_type}-{tt}" for tt in self.target_types] + self.operator_variants
+
+        # all_variants = python_variants
+
+        self.task = current_task
+        self.config_task()
+
+        return all_variants, python_variants, java_variants
+
+    def get_all_generation_variants(self):
+        current_task = self.task
+
+        self.task = "humanevalexplaindescribe-python"
+        self.config_task()
+        python_variants = [f"{tt}" for tt in self.target_types] + self.operator_variants
+
+        self.task = "humanevalexplaindescribe-java"
+        self.config_task()
+        java_variants = [f"{tt}" for tt in self.target_types] + self.operator_variants
+
+        all_variants = list(set(python_variants + java_variants))
+
+        self.task = "humanevalexplaindescribe-cpp"
+        self.config_task()
+        cpp_variants = [f"{self.filter_type}-{tt}" for tt in self.target_types] + self.operator_variants
 
         self.task = current_task
         self.config_task()

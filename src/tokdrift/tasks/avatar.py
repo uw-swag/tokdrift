@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Dict, List
 
 from evaluate import load
+from tqdm import tqdm
 from ..base import Task
 
 LANGUAGE_TO_NAME = {
@@ -129,9 +130,7 @@ class AvatarGenerative(Avatar):
         correct_translations = 0
         test_results = []
         
-        for i, (gen_list, ref) in enumerate(zip(generations, references)):
-            print(f"Processing {i} of {total_samples} samples")
-            
+        for i, (gen_list, ref) in enumerate(tqdm(zip(generations, references), total=total_samples, desc="Processing samples")):
             # Take first generation for each sample
             if not gen_list:
                 test_results.append({"passed": False, "error": "No generation"})

@@ -15,12 +15,14 @@ dependencies = [
     "antlr4-tools>=0.2.2",
     "datasets==3.6.0",
     "evaluate==0.4.5",
+    "levenshtein>=0.27.3",
     "protobuf>=6.33.2",
     "scikit-learn>=1.8.0",
     "seaborn>=0.13.2",
     "torch>=2.5.1",
     "torchvision>=0.20.1",
     "transformers==4.56.2",
+    "vllm>=0.13.0",
 ]
 
 

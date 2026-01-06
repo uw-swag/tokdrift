@@ -9,7 +9,8 @@
 
 /tokenizers/
 datasets/avatar/
-data/output/cpp/
+data/output/additional_results
+data/output/tables
 
 # Distribution / packaging
 .Python

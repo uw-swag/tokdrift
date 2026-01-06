@@ -270,6 +270,11 @@ class ResultExtractor:
         target_types = [f"{temp_config.filter_type}-{tt}" for tt in temp_config.target_types]
         java_columns = target_types + temp_config.operator_variants
 
+        temp_config.task = "humanevalexplaindescribe-cpp"
+        temp_config.config_task()
+        target_types = [f"{temp_config.filter_type}-{tt}" for tt in temp_config.target_types]
+        cpp_columns = target_types + temp_config.operator_variants
+
         # Helper function to get language from task
         def get_task_lang(task_name):
             temp_config = Config()
@@ -323,9 +328,14 @@ class ResultExtractor:
         
         # Prepare data for all CSVs
         def prepare_data_rows(calculation_type, target_columns=None):
-            if calculation_type in ['python_avg_accuracy', 'java_avg_accuracy']:
+            if calculation_type in ['python_avg_accuracy', 'java_avg_accuracy', 'cpp_avg_accuracy']:
                 # For language-specific average accuracy, group by model and calculate aggregated metrics
-                target_lang = 'python' if calculation_type == 'python_avg_accuracy' else 'java'
+                if calculation_type == 'python_avg_accuracy':
+                    target_lang = 'python'
+                elif calculation_type == 'java_avg_accuracy':
+                    target_lang = 'java'
+                else:
+                    target_lang = 'cpp'
                 model_metrics = {}
 
                 for task, model_name, model_path, json_files in task_model_data:
@@ -468,15 +478,15 @@ class ResultExtractor:
             if calculation_type == 'accuracy':
                 average_row = {'task_name': 'average', 'lang': 'average', 'model_name': 'average', 'baseline': ''}
                 max_row = {'task_name': 'max', 'lang': 'max', 'model_name': 'max', 'baseline': ''}
-            elif calculation_type in ['python_avg_accuracy', 'java_avg_accuracy']:
+            elif calculation_type in ['python_avg_accuracy', 'java_avg_accuracy', 'cpp_avg_accuracy']:
                 average_row = {'model_name': 'average', 'baseline': ''}
                 max_row = {'model_name': 'max', 'baseline': ''}
             else:
                 average_row = {'task_name': 'average', 'lang': 'average', 'model_name': 'average'}
                 max_row = {'task_name': 'max', 'lang': 'max', 'model_name': 'max'}
-            
+
             # Handle baseline column for accuracy and language-specific avg_accuracy types
-            if calculation_type in ['accuracy', 'python_avg_accuracy', 'java_avg_accuracy']:
+            if calculation_type in ['accuracy', 'python_avg_accuracy', 'java_avg_accuracy', 'cpp_avg_accuracy']:
                 baseline_values = []
                 for row in rows:
                     value = row.get('baseline', None)
@@ -519,13 +529,14 @@ class ResultExtractor:
             
             return average_row, max_row
         
-        # Generate six CSV files (including separate Python and Java avg_accuracy)
+        # Generate CSV files (including separate Python, Java, and C++ avg_accuracy)
         csv_configs = [
             ('sensitivity', '_sensitivity.csv', ['task_name', 'lang', 'model_name'] + json_columns, json_columns),
             ('acc_delta', '_acc_delta.csv', ['task_name', 'lang', 'model_name'] + json_columns, json_columns),
             ('accuracy', '_accuracy.csv', ['task_name', 'lang', 'model_name', 'baseline'] + json_columns, json_columns),
             ('python_avg_accuracy', '_python_avg_accuracy.csv', ['model_name', 'baseline'] + python_columns, python_columns),
-            ('java_avg_accuracy', '_java_avg_accuracy.csv', ['model_name', 'baseline'] + java_columns, java_columns)
+            ('java_avg_accuracy', '_java_avg_accuracy.csv', ['model_name', 'baseline'] + java_columns, java_columns),
+            ('cpp_avg_accuracy', '_cpp_avg_accuracy.csv', ['model_name', 'baseline'] + cpp_columns, cpp_columns)
         ]
         
         output_files = []
@@ -616,7 +627,6 @@ if __name__ == "__main__":
 
         if processing_mode == "multi_token_identifiers":
             # Extract identifiers
-            print(f"Extracting identifiers...")
             all_multi_token_identifiers, all_test_identifiers = data_extractor.extract_new_identifiers()
 
             # Generate new multi-token dataset
@@ -632,7 +642,6 @@ if __name__ == "__main__":
 
         elif processing_mode == "combined_token_operators":
             # Extract combined token operators
-            print(f"Extracting combined token operators...")
             all_combined_token_operators = data_extractor.extract_combined_token_operators()
 
             # Process combined token operators

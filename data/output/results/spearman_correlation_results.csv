@@ -1,0 +1,3 @@
+metric,Llama-3.1-8B-Instruct,Llama-3.2-3B-Instruct,Llama-3.3-70B-Instruct,Qwen2.5-Coder-1.5B-Instruct,Qwen2.5-Coder-32B-Instruct,Qwen2.5-Coder-7B-Instruct,deepseek-coder-1.3b-instruct,deepseek-coder-33b-instruct,deepseek-coder-6.7b-instruct
+r_s,0.9097,-0.3915,0.9408,0.4715,0.9458,0.9113,-0.2117,0.8787,0.8724
+p_value,0.0000,0.0324,0.0000,0.0085,0.0000,0.0000,0.2614,0.0000,0.0000
